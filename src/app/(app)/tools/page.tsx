@@ -11,11 +11,20 @@ import {
   Timer,
   Users,
   Wrench,
+  Bot,
+  GraduationCap
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PageHeader from '@/components/page-header';
 
 const tools = [
+  {
+    icon: Bot,
+    title: 'AI Tutors',
+    description: 'Engage with specialized tutors for Math, Chemistry, and more.',
+    href: '/ko-chat',
+    active: true,
+  },
   {
     icon: Lightbulb,
     title: 'Program Evaluator',
@@ -37,8 +46,8 @@ const tools = [
     href: '#',
     active: false,
   },
-  {
-    icon: BookOpen,
+    {
+    icon: GraduationCap,
     title: 'Explore Streams',
     description: 'Discover academic streams and subject combinations.',
     href: '#',
@@ -47,14 +56,14 @@ const tools = [
   {
     icon: FileText,
     title: 'Form Central',
-    description: 'Initiate various application forms from a single point.',
+    description: 'Step-by-step guidance on filling out important application forms.',
     href: '/forms',
     active: true,
   },
   {
     icon: Layers,
     title: 'Flashcards',
-    description: 'Create and study with digital flashcards.',
+    description: 'Create and study with pre-made and custom digital flashcards.',
     href: '#',
     active: false,
   },
@@ -68,7 +77,7 @@ const tools = [
   {
     icon: Timer,
     title: 'Exam Countdown',
-    description: 'Set timers for your upcoming exams.',
+    description: 'Set timers and get strategies for your upcoming exams.',
     href: '#',
     active: false,
   },
@@ -141,7 +150,7 @@ export default function ToolsPage() {
               </Link>
             );
           }
-          return ToolCard;
+          return <div key={tool.title}>{ToolCard}</div>;
         })}
       </div>
     </>
