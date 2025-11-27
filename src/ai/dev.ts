@@ -1,1 +1,8 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/generate-timetable.ts';
+import '@/ai/flows/generate-smart-notes.ts';
+import '@/ai/flows/evaluate-college-programs.ts';
+import '@/ai/flows/generate-form-filling-guide.ts';
+import '@/ai/flows/generate-project-ideas.ts';
