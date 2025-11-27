@@ -5,33 +5,31 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User } from 'lucide-react';
+import { Bot, Send, User, Loader2 } from 'lucide-react';
+import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import { useToast } from '@/hooks/use-toast';
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
-  sender: 'user' | 'ai';
+  role: 'user' | 'model';
 }
 
-const mockResponses = [
-    "Alright, listen up. Here's the deal...",
-    "You call that a question? Fine, let's break it down, but pay attention.",
-    "Let me put it in terms even you can understand.",
-    "Okay, here's the 10,000-foot view. Keep up.",
-    "That's a common mistake. The actual reason is far more interesting...",
-];
+const koPersona = "You are Ko AI, a witty, slightly impatient, and incredibly knowledgeable AI assistant. You get straight to the point. You are here to help, but you won't suffer fools gladly. Your tone is sharp, concise, and maybe a little sarcastic, but always accurate.";
 
 export default function KoChatPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
+      id: '1',
       text: "Alright, what's on your mind? I haven't got all day. Ask me anything, but make it interesting.",
-      sender: 'ai',
+      role: 'model',
     },
   ]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const userAvatar = PlaceHolderImages.find((p) => p.id === 'user-avatar-1');
+  const { toast } = useToast();
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -39,27 +37,49 @@ export default function KoChatPage() {
     }
   }, [messages]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
-      id: Date.now(),
+      id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      role: 'user',
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const aiResponse: Message = {
-        id: Date.now() + 1,
-        text: mockResponses[Math.floor(Math.random() * mockResponses.length)],
-        sender: 'ai',
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+    try {
+        const history: ConversationalChatInput['history'] = messages.map(msg => ({
+            role: msg.role,
+            content: [{ text: msg.text }]
+        }));
+
+        const response = await conversationalChat({
+            persona: koPersona,
+            history: history,
+            message: input,
+        });
+
+        const aiResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            text: response.reply,
+            role: 'model'
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+        console.error("Failed to get AI response:", error);
+        toast({
+            variant: 'destructive',
+            title: 'An error occurred.',
+            description: 'Failed to get a response from Ko AI. Please try again.',
+        });
+        setMessages(prev => prev.slice(0, -1));
+    } finally {
+        setIsLoading(false);
+    }
   };
   
   return (
@@ -71,10 +91,10 @@ export default function KoChatPage() {
             key={message.id}
             className={cn(
               'flex items-start gap-4',
-              message.sender === 'user' ? 'justify-end' : 'justify-start'
+              message.role === 'user' ? 'justify-end' : 'justify-start'
             )}
           >
-            {message.sender === 'ai' && (
+            {message.role === 'model' && (
               <Avatar className="h-10 w-10 border-2 border-primary">
                 <AvatarFallback>
                   <Bot />
@@ -84,14 +104,14 @@ export default function KoChatPage() {
             <div
               className={cn(
                 'max-w-md rounded-lg p-3',
-                message.sender === 'user'
+                message.role === 'user'
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-secondary text-secondary-foreground'
               )}
             >
               <p className="text-sm">{message.text}</p>
             </div>
-            {message.sender === 'user' && (
+            {message.role === 'user' && (
               <Avatar className="h-10 w-10">
                 <AvatarImage src={userAvatar?.imageUrl} alt="User" />
                 <AvatarFallback>
@@ -101,6 +121,18 @@ export default function KoChatPage() {
             )}
           </div>
         ))}
+         {isLoading && (
+            <div className="flex items-start gap-4 justify-start">
+                <Avatar className="h-10 w-10 border-2 border-primary">
+                    <AvatarFallback>
+                        <Bot />
+                    </AvatarFallback>
+                </Avatar>
+                <div className="max-w-md rounded-lg p-3 bg-secondary text-secondary-foreground">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                </div>
+            </div>
+        )}
       </div>
       <div className="mt-auto pt-4">
         <form onSubmit={handleSubmit} className="relative">
@@ -115,18 +147,19 @@ export default function KoChatPage() {
                 handleSubmit(e);
               }
             }}
+            disabled={isLoading}
           />
           <Button
             type="submit"
             size="icon"
             className="absolute right-3 top-1/2 -translate-y-1/2"
-            disabled={!input.trim()}
+            disabled={!input.trim() || isLoading}
           >
             <Send className="h-4 w-4" />
           </Button>
         </form>
          <p className="text-xs text-center text-muted-foreground mt-2">
-            Ko AI is in a simulated interaction mode. Responses are for demonstration purposes.
+            Ko AI is now connected to a live model.
           </p>
       </div>
     </div>

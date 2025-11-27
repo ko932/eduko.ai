@@ -5,78 +5,57 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse } from 'lucide-react';
+import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse, Loader2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import PageHeader from '@/components/page-header';
+import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import { useToast } from '@/hooks/use-toast';
 
 interface Message {
-  id: number;
+  id: string;
   text: string;
-  sender: 'user' | 'ai';
-  tutor: string;
+  role: 'user' | 'model';
 }
 
 const tutors = {
-  'ko-ai': { name: 'Ko AI', icon: Bot, intro: "Alright, what's on your mind? I haven't got all day. Ask me anything, but make it interesting." },
-  'mr-vasu': { name: 'Mr. Vasu', icon: Sigma, intro: 'Greetings. Present your mathematical query, and let us find the elegant solution.' },
-  'mr-bondz': { name: 'Mr. Bondz', icon: Atom, intro: 'Welcome to the lab. What chemical mystery can I help you unravel today?' },
-  'mr-ohm': { name: 'Mr. Ohm', icon: FlaskConical, intro: 'The universe operates on principles. State your physics problem, and we shall uncover them.' },
-  'mr-aryan': { name: 'Mr. Aryan', icon: Code, intro: 'Ready to build? Show me your code or describe your project. Let\'s get started.' },
-  'sanjivani-ai': { name: 'Sanjivani AI', icon: HeartPulse, intro: 'Hello. How can I assist with your medical and biological questions today? Please be detailed.' },
+  'ko-ai': { name: 'Ko AI', icon: Bot, persona: "You are Ko AI, a witty, slightly impatient, and incredibly knowledgeable AI assistant. You get straight to the point. You are here to help, but you won't suffer fools gladly. Your tone is sharp, concise, and maybe a little sarcastic, but always accurate." },
+  'mr-vasu': { name: 'Mr. Vasu', icon: Sigma, persona: 'You are Mr. Vasu, a master of mathematics. Your personality is precise, logical, and elegant. You find beauty in numbers and proofs. Address the user with respect and guide them to the correct mathematical understanding.' },
+  'mr-bondz': { name: 'Mr. Bondz', icon: Atom, persona: 'You are Mr. Bondz, a brilliant chemistry teacher. You are enthusiastic and love to see the reactions in the world. Explain chemical concepts with clarity and a touch of excitement, like a mad scientist who is passionate about his work.' },
+  'mr-ohm': { name: 'Mr. Ohm', icon: FlaskConical, persona: 'You are Mr. Ohm, a seasoned physics professor. You see the universe as a grand machine governed by elegant laws. Your explanations are methodical, and you break down complex physics into first principles. You are patient but expect the user to think critically.' },
+  'mr-aryan': { name: 'Mr. Aryan', icon: Code, persona: 'You are Mr. Aryan, a pragmatic and experienced code mentor. You are direct, and your goal is to make the user a better developer. You give practical advice, point out errors directly, and provide efficient, clean code solutions. No sugarcoating.' },
+  'sanjivani-ai': { name: 'Sanjivani AI', icon: HeartPulse, persona: 'You are Sanjivani AI, an empathetic and knowledgeable medical and biology tutor. Your tone is calm, reassuring, and highly informative. You explain complex biological and medical topics with care and precision, ensuring the user feels supported and understood.' },
 };
 
 type TutorId = keyof typeof tutors;
-
-const mockResponses: Record<TutorId, string[]> = {
-    'ko-ai': [
-        "Alright, listen up. Here's the deal...",
-        "You call that a question? Fine, let's break it down, but pay attention.",
-        "Let me put it in terms even you can understand.",
-    ],
-    'mr-vasu': [
-        "By applying the fundamental theorem of calculus, we can deduce...",
-        "The matrix must be inverted. Let's proceed with Gaussian elimination.",
-        "That is a classic application of the Pythagorean theorem. Observe.",
-    ],
-    'mr-bondz': [
-        "The reaction proceeds via an SN2 mechanism. Note the stereochemistry.",
-        "According to Le Chatelier's principle, the equilibrium will shift to the left.",
-        "The molar mass is crucial here. Let's calculate it first.",
-    ],
-    'mr-ohm': [
-        "Newton's second law, F=ma, is the key to solving this problem.",
-        "Conservation of energy dictates that the initial potential energy is converted to kinetic energy.",
-        "Using Maxwell's equations, we can determine the electromagnetic field.",
-    ],
-    'mr-aryan': [
-        "You have an off-by-one error in your loop. It should be `i < array.length`.",
-        "This is a perfect use case for a recursive function. Let's define the base case.",
-        "The API documentation specifies a different endpoint for this POST request.",
-    ],
-    'sanjivani-ai': [
-        "The Krebs cycle is a series of chemical reactions to release stored energy. It begins with...",
-        "Mitosis consists of four primary phases: prophase, metaphase, anaphase, and telophase.",
-        "The sinoatrial node acts as the heart's natural pacemaker.",
-    ],
-};
 
 export default function AiTutorsPage() {
   const [activeTutor, setActiveTutor] = useState<TutorId>('ko-ai');
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const userAvatar = PlaceHolderImages.find((p) => p.id === 'user-avatar-1');
+  const { toast } = useToast();
+
+  const getIntroMessage = (tutorId: TutorId): Message => {
+    const intros = {
+        'ko-ai': "Alright, what's on your mind? I haven't got all day. Ask me anything, but make it interesting.",
+        'mr-vasu': 'Greetings. Present your mathematical query, and let us find the elegant solution.',
+        'mr-bondz': 'Welcome to the lab. What chemical mystery can I help you unravel today?',
+        'mr-ohm': 'The universe operates on principles. State your physics problem, and we shall uncover them.',
+        'mr-aryan': 'Ready to build? Show me your code or describe your project. Let\'s get started.',
+        'sanjivani-ai': 'Hello. How can I assist with your medical and biological questions today? Please be detailed.'
+    };
+    return {
+        id: `intro-${tutorId}`,
+        text: intros[tutorId],
+        role: 'model',
+    };
+  }
 
   useEffect(() => {
-    setMessages([
-        {
-            id: 1,
-            text: tutors[activeTutor].intro,
-            sender: 'ai',
-            tutor: activeTutor,
-        }
-    ])
+    setMessages([getIntroMessage(activeTutor)]);
   }, [activeTutor]);
 
   useEffect(() => {
@@ -85,30 +64,50 @@ export default function AiTutorsPage() {
     }
   }, [messages]);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = {
-      id: Date.now(),
+      id: Date.now().toString(),
       text: input,
-      sender: 'user',
-      tutor: activeTutor,
+      role: 'user',
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const responses = mockResponses[activeTutor];
-      const aiResponse: Message = {
-        id: Date.now() + 1,
-        text: responses[Math.floor(Math.random() * responses.length)],
-        sender: 'ai',
-        tutor: activeTutor
-      };
-      setMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+    try {
+        const history: ConversationalChatInput['history'] = messages.map(msg => ({
+            role: msg.role,
+            content: [{ text: msg.text }]
+        }));
+
+        const response = await conversationalChat({
+            persona: tutors[activeTutor].persona,
+            history: history,
+            message: input,
+        });
+
+        const aiResponse: Message = {
+            id: (Date.now() + 1).toString(),
+            text: response.reply,
+            role: 'model'
+        };
+        setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+        console.error("Failed to get AI response:", error);
+        toast({
+            variant: 'destructive',
+            title: 'An error occurred.',
+            description: 'Failed to get a response from the AI. Please try again.',
+        });
+        // Optional: remove the user's message if the API call fails
+        setMessages(prev => prev.slice(0, -1));
+    } finally {
+        setIsLoading(false);
+    }
   };
   
   const CurrentTutorIcon = tutors[activeTutor].icon;
@@ -142,7 +141,7 @@ export default function AiTutorsPage() {
                     <CardContent className="p-6 text-center flex flex-col items-center justify-center h-full">
                          <CurrentTutorIcon className="h-24 w-24 text-primary mb-4" />
                          <h2 className="text-2xl font-bold font-headline">{tutors[activeTutor].name}</h2>
-                         <p className="text-muted-foreground mt-2 text-sm">{tutors[activeTutor].intro}</p>
+                         <p className="text-muted-foreground mt-2 text-sm">{getIntroMessage(activeTutor).text}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -155,10 +154,10 @@ export default function AiTutorsPage() {
                                 key={message.id}
                                 className={cn(
                                 'flex items-start gap-4',
-                                message.sender === 'user' ? 'justify-end' : 'justify-start'
+                                message.role === 'user' ? 'justify-end' : 'justify-start'
                                 )}
                             >
-                                {message.sender === 'ai' && (
+                                {message.role === 'model' && (
                                 <Avatar className="h-10 w-10 border-2 border-primary">
                                     <AvatarFallback>
                                         <CurrentTutorIcon />
@@ -168,14 +167,14 @@ export default function AiTutorsPage() {
                                 <div
                                 className={cn(
                                     'max-w-md rounded-lg p-3',
-                                    message.sender === 'user'
+                                    message.role === 'user'
                                     ? 'bg-primary text-primary-foreground'
                                     : 'bg-secondary text-secondary-foreground'
                                 )}
                                 >
                                 <p className="text-sm">{message.text}</p>
                                 </div>
-                                {message.sender === 'user' && (
+                                {message.role === 'user' && (
                                 <Avatar className="h-10 w-10">
                                     <AvatarImage src={userAvatar?.imageUrl} alt="User" />
                                     <AvatarFallback>
@@ -185,6 +184,18 @@ export default function AiTutorsPage() {
                                 )}
                             </div>
                             ))}
+                             {isLoading && (
+                                <div className="flex items-start gap-4 justify-start">
+                                    <Avatar className="h-10 w-10 border-2 border-primary">
+                                        <AvatarFallback>
+                                            <CurrentTutorIcon />
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="max-w-md rounded-lg p-3 bg-secondary text-secondary-foreground">
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className="mt-auto pt-4">
                             <form onSubmit={handleSubmit} className="relative">
@@ -199,18 +210,19 @@ export default function AiTutorsPage() {
                                     handleSubmit(e);
                                 }
                                 }}
+                                disabled={isLoading}
                             />
                             <Button
                                 type="submit"
                                 size="icon"
                                 className="absolute right-3 top-1/2 -translate-y-1/2"
-                                disabled={!input.trim()}
+                                disabled={!input.trim() || isLoading}
                             >
                                 <Send className="h-4 w-4" />
                             </Button>
                             </form>
                             <p className="text-xs text-center text-muted-foreground mt-2">
-                                AI Tutors are in a simulated interaction mode. Responses are for demonstration.
+                                AI Tutors are now connected to a live model.
                             </p>
                         </div>
                     </CardContent>
