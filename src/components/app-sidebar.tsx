@@ -75,9 +75,8 @@ const AppSidebar = () => {
                 asChild
                 isActive={isActive('/tools')}
                 tooltip="Tools"
-                disabled
               >
-                <Link href="#">
+                <Link href="/tools">
                   <Wrench />
                   <span>Tools</span>
                 </Link>
