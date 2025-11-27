@@ -15,6 +15,7 @@ import {
 import {
   Atom,
   Bot,
+  BrainCircuit,
   Compass,
   FileText,
   HelpCircle,
@@ -91,6 +92,18 @@ const AppSidebar = () => {
                 <Link href="/tools">
                   <Wrench />
                   <span>Tools</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/project-genx')}
+                tooltip="Project GenX"
+              >
+                <Link href="/project-genx">
+                  <BrainCircuit />
+                  <span>Project GenX</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

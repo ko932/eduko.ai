@@ -129,6 +129,13 @@ const tools = [
     href: '/ai-tutors',
     active: true,
   },
+  {
+    icon: BrainCircuit,
+    title: 'Project GenX',
+    description: 'Your personal AI project architect for creating detailed project blueprints.',
+    href: '/project-genx',
+    active: true,
+  }
 ];
 
 export default function ToolsPage() {
