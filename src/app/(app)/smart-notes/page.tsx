@@ -73,8 +73,8 @@ export default function SmartNotesPage() {
   return (
     <>
       <PageHeader
-        title="Smart Notes Generator"
-        description="Turn any text into comprehensive study materials."
+        title="Smart Notes"
+        description="Generate high-quality AI notes for any topic — from school to masters."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -94,7 +94,7 @@ export default function SmartNotesPage() {
                     name="rawText"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Raw Text</FormLabel>
+                        <FormLabel>Raw Text / Content</FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Paste your notes, article, or any text here..."
@@ -111,7 +111,7 @@ export default function SmartNotesPage() {
                     name="topic"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Topic</FormLabel>
+                        <FormLabel>Topic Name</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., Photosynthesis" {...field} />
                         </FormControl>
@@ -124,7 +124,7 @@ export default function SmartNotesPage() {
                     name="gradeLevel"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Grade Level</FormLabel>
+                        <FormLabel>Education Level</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., 10th Grade, University" {...field} />
                         </FormControl>
@@ -158,31 +158,43 @@ export default function SmartNotesPage() {
               {isLoading && <Skeleton className="h-96 w-full" />}
               {result && (
                 <Tabs defaultValue="summary" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
+                  <TabsList className="grid w-full grid-cols-3 lg:grid-cols-4">
                     <TabsTrigger value="summary">Summary</TabsTrigger>
-                    <TabsTrigger value="mcqs">MCQs</TabsTrigger>
-                    <TabsTrigger value="longNotes">Long Notes</TabsTrigger>
+                    <TabsTrigger value="fullNotes">Full Notes</TabsTrigger>
+                    <TabsTrigger value="flashcards">Flashcards</TabsTrigger>
+                    <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
                   </TabsList>
+
                   <TabsContent value="summary" className="prose prose-sm prose-invert max-w-none mt-4">
                     <h3>Summary</h3>
                     <p>{result.summary}</p>
-                    <h3>Mind Map Keywords</h3>
-                    <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.mindMapKeywords}</pre>
-                     <h3>Definitions</h3>
-                    <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.definitions}</pre>
+                    <h3 className='mt-6'>Concept Breakdown</h3>
+                     <div className="space-y-2">
+                        <p><strong>What:</strong> {result.conceptBreakdown.what}</p>
+                        <p><strong>Why:</strong> {result.conceptBreakdown.why}</p>
+                        <p><strong>How:</strong> {result.conceptBreakdown.how}</p>
+                     </div>
+                    <h3 className='mt-6'>Mind Map</h3>
+                    <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.mindMap}</pre>
                   </TabsContent>
-                  <TabsContent value="mcqs" className="prose prose-sm prose-invert max-w-none mt-4">
-                     <h3>Multiple Choice Questions</h3>
-                     <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.mcqs}</pre>
+
+                  <TabsContent value="fullNotes" className="prose prose-sm prose-invert max-w-none mt-4">
+                     <h3>Full Notes</h3>
+                     <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.fullNotes}</pre>
+                  </TabsContent>
+                  
+                  <TabsContent value="flashcards" className="prose prose-sm prose-invert max-w-none mt-4">
                      <h3>Flashcards</h3>
                      <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.flashcards}</pre>
                   </TabsContent>
-                  <TabsContent value="longNotes" className="prose prose-sm prose-invert max-w-none mt-4">
-                    <h3>Long Notes (Markdown)</h3>
-                    <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.longNotesMarkdown}</pre>
-                    <h3>Examples</h3>
-                    <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.examples}</pre>
+
+                   <TabsContent value="quizzes" className="prose prose-sm prose-invert max-w-none mt-4">
+                     <h3>Multiple Choice Questions</h3>
+                     <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.mcqs}</pre>
+                     <h3 className='mt-6'>Fill in the Blanks</h3>
+                     <pre className="whitespace-pre-wrap bg-secondary/50 p-4 rounded-lg font-code">{result.fillInTheBlanks}</pre>
                   </TabsContent>
+
                 </Tabs>
               )}
               {!isLoading && !result && (
