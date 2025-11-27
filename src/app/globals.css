@@ -40,13 +40,13 @@
   }
 
   .dark {
-    --background: 227 48% 8%;
+    --background: 227 48% 8%; /* #0a0d1a */
     --foreground: 210 40% 98%;
     --card: 227 30% 12%;
     --card-foreground: 210 40% 98%;
     --popover: 227 48% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 175 65% 51%;
+    --primary: 175 65% 51%; /* #30d5c8 */
     --primary-foreground: 227 48% 8%;
     --secondary: 227 43% 25%;
     --secondary-foreground: 210 40% 98%;
@@ -64,7 +64,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 227 48% 8%;
+    --sidebar-background: 227 48% 8%; /* #0a0d1a */
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 175 65% 51%;
     --sidebar-primary-foreground: 227 48% 8%;
