@@ -13,6 +13,7 @@ import {
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 import {
+  Atom,
   Bot,
   Compass,
   FileText,
@@ -66,6 +67,18 @@ const AppSidebar = () => {
                 <Link href="/ko-chat">
                   <Bot />
                   <span>Ko AI</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/ai-tutors')}
+                tooltip="AI Tutors"
+              >
+                <Link href="/ai-tutors">
+                  <Atom />
+                  <span>AI Tutors</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

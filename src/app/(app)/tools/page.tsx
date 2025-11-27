@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   BookOpen,
@@ -12,19 +14,16 @@ import {
   Users,
   Wrench,
   Bot,
-  GraduationCap
+  GraduationCap,
+  Atom,
+  Code,
+  HeartPulse,
+  Sigma,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import PageHeader from '@/components/page-header';
 
 const tools = [
-  {
-    icon: Bot,
-    title: 'AI Tutors',
-    description: 'Engage with specialized tutors for Math, Chemistry, and more.',
-    href: '/ko-chat',
-    active: true,
-  },
   {
     icon: Lightbulb,
     title: 'Program Evaluator',
@@ -46,7 +45,7 @@ const tools = [
     href: '#',
     active: false,
   },
-    {
+  {
     icon: GraduationCap,
     title: 'Explore Streams',
     description: 'Discover academic streams and subject combinations.',
@@ -56,14 +55,14 @@ const tools = [
   {
     icon: FileText,
     title: 'Form Central',
-    description: 'Step-by-step guidance on filling out important application forms.',
+    description: 'Initiate various application forms from a single point.',
     href: '/forms',
     active: true,
   },
   {
     icon: Layers,
     title: 'Flashcards',
-    description: 'Create and study with pre-made and custom digital flashcards.',
+    description: 'Create and study with digital flashcards.',
     href: '#',
     active: false,
   },
@@ -77,7 +76,7 @@ const tools = [
   {
     icon: Timer,
     title: 'Exam Countdown',
-    description: 'Set timers and get strategies for your upcoming exams.',
+    description: 'Set timers for your upcoming exams.',
     href: '#',
     active: false,
   },
@@ -91,15 +90,43 @@ const tools = [
   {
     icon: Users,
     title: 'Study Battle Room',
-    description: 'Collaborative study sessions with peers and AI tutors.',
+    description: 'Create or join a virtual study session with friends and an AI Tutor.',
     href: '#',
     active: false,
   },
   {
+    icon: Sigma,
+    title: 'Mr. Vasu – AI Math Tutor',
+    description: 'Solve equations and visualize graphs with your AI math partner.',
+    href: '/ai-tutors',
+    active: true,
+  },
+  {
+    icon: Atom,
+    title: 'Mr. Bondz – AI Chemistry Tutor',
+    description: 'Master reactions, stoichiometry, and periodic trends.',
+    href: '/ai-tutors',
+    active: true,
+  },
+  {
     icon: FlaskConical,
-    title: 'Project GenX',
-    description: 'Get full project blueprints from just an idea.',
-    href: '/project-genx',
+    title: 'Mr. Ohm – AI Physics Tutor',
+    description: 'Solve mechanics, EM, and thermodynamics with expert guidance.',
+    href: '/ai-tutors',
+    active: true,
+  },
+  {
+    icon: Code,
+    title: 'Mr. Aryan – Code Mentor',
+    description: 'Your AI partner for coding, debugging, and building projects.',
+    href: '/ai-tutors',
+    active: true,
+  },
+  {
+    icon: HeartPulse,
+    title: 'Sanjivani AI – Medical Tutor',
+    description: 'An empathetic AI guide for complex medical and biological concepts.',
+    href: '/ai-tutors',
     active: true,
   },
 ];
@@ -135,7 +162,7 @@ export default function ToolsPage() {
                   </CardTitle>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex-grow">
                 <p className="text-muted-foreground text-sm">
                   {tool.description}
                 </p>
@@ -145,7 +172,7 @@ export default function ToolsPage() {
 
           if (tool.active) {
             return (
-              <Link href={tool.href} key={tool.title}>
+              <Link href={tool.href} key={tool.title} className="flex">
                 {ToolCard}
               </Link>
             );
