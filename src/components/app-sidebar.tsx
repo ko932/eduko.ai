@@ -26,6 +26,7 @@ import {
   DollarSign,
   Headphones,
   User,
+  BookOpen,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -104,6 +105,18 @@ const AppSidebar = () => {
                 <Link href="/project-genx">
                   <BrainCircuit />
                   <span>Project GenX</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive('/smart-notes')}
+                tooltip="Smart Notes"
+              >
+                <Link href="/smart-notes">
+                  <BookOpen />
+                  <span>Smart Notes</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
