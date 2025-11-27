@@ -5,6 +5,12 @@
       "description": "User avatar",
       "imageUrl": "https://images.unsplash.com/photo-1640960543409-dbe56ccc30e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwZXJzb24lMjBhdmF0YXJ8ZW58MHx8fHwxNzY0MjI1NDgwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "person avatar"
+    },
+    {
+      "id": "ocean-waves",
+      "description": "Abstract image of ocean waves",
+      "imageUrl": "https://images.unsplash.com/photo-1514747975201-4715db583da9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvY2VhbiUyMHdhdmVzfGVufDB8fHx8MTc2NDIwNjE1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ocean waves"
     }
   ]
 }

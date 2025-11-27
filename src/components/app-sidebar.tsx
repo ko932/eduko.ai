@@ -10,28 +10,29 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarGroup,
-  SidebarGroupLabel,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import {
   Bot,
-  Calendar,
-  Cpu,
+  Compass,
   FileText,
-  FlaskConical,
-  GraduationCap,
-  LayoutDashboard,
-  LifeBuoy,
-  Notebook,
-  Settings,
-  ShieldCheck,
+  HelpCircle,
+  Home,
+  MessageSquare,
+  Store as StoreIcon,
+  Wrench,
+  DollarSign,
+  Headphones,
+  ClipboardCheck,
+  UserPlus,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserNav } from './user-nav';
+import { Cpu } from 'lucide-react';
 
 const AppSidebar = () => {
   const pathname = usePathname();
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => pathname.startsWith(path);
 
   return (
     <Sidebar>
@@ -39,53 +40,46 @@ const AppSidebar = () => {
         <div className="flex items-center gap-2">
             <SidebarTrigger className="flex md:hidden"/>
             <Cpu className="w-8 h-8 text-primary" />
-            <h1 className="font-bold text-lg font-headline">Eduko.AI</h1>
+            <h1 className="font-bold text-lg font-headline">Eduko</h1>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          <SidebarGroup>
+          <SidebarGroup className="pt-0">
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
                 isActive={isActive('/account')}
-                tooltip="Dashboard"
+                tooltip="Home"
               >
                 <Link href="/account">
-                  <LayoutDashboard />
-                  <span>Dashboard</span>
+                  <Home />
+                  <span>Home</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarGroup>
-
-          <SidebarGroup>
-            <SidebarGroupLabel>AI Assistant</SidebarGroupLabel>
-            <SidebarMenuItem>
+             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
                 isActive={isActive('/ko-chat')}
-                tooltip="Ko AI Chat"
+                tooltip="Ko AI"
               >
                 <Link href="/ko-chat">
                   <Bot />
-                  <span>Ko AI Chat</span>
+                  <span>Ko AI</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarGroup>
-
-          <SidebarGroup>
-            <SidebarGroupLabel>AI Tools</SidebarGroupLabel>
-            <SidebarMenuItem>
+             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={isActive('/project-genx')}
-                tooltip="Project GenX"
+                isActive={isActive('/tools')}
+                tooltip="Tools"
+                disabled
               >
-                <Link href="/project-genx">
-                  <FlaskConical />
-                  <span>Project GenX</span>
+                <Link href="#">
+                  <Wrench />
+                  <span>Tools</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -93,37 +87,49 @@ const AppSidebar = () => {
               <SidebarMenuButton
                 asChild
                 isActive={isActive('/program-evaluator')}
-                tooltip="Program Evaluator"
+                tooltip="Career Compass"
               >
                 <Link href="/program-evaluator">
-                  <GraduationCap />
-                  <span>Program Evaluator</span>
+                  <Compass />
+                  <span>Career Compass</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={isActive('/timetable')}
-                tooltip="Timetable Generator"
+                isActive={isActive('/pricing')}
+                tooltip="Pricing"
+                disabled
               >
-                <Link href="/timetable">
-                  <Calendar />
-                  <span>Timetable Generator</span>
+                <Link href="#">
+                  <DollarSign />
+                  <span>Pricing</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem>
+             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={isActive('/smart-notes')}
-                tooltip="Smart Notes"
+                isActive={isActive('/store')}
+                tooltip="Store"
+                disabled
               >
-                <Link href="/smart-notes">
-                  <Notebook />
-                  <span>Smart Notes</span>
+                <Link href="#">
+                  <StoreIcon />
+                  <span>Store</span>
                 </Link>
               </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarGroup>
+
+          <SidebarSeparator />
+
+          <SidebarGroup>
+            <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/exams')} tooltip="Exams" disabled>
+                    <Link href="#"><ClipboardCheck /><span>Exams</span></Link>
+                </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -137,62 +143,33 @@ const AppSidebar = () => {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>Specialized Tutors</SidebarGroupLabel>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Mathematics" disabled>
-                <span className="text-2xl">👨🏻‍🏫</span>
-                  <span>Mr. Vasu (Maths)</span>
+              <SidebarMenuButton asChild isActive={isActive('/feedback')} tooltip="Feedback" disabled>
+                <Link href="#"><MessageSquare /><span>Feedback</span></Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Chemistry" disabled>
-                <span className="text-2xl">👨‍🔬</span>
-                  <span>Mr. Bondz (Chemistry)</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Physics" disabled>
-                <span className="text-2xl">👨‍🚀</span>
-                  <span>Mr. Ohm (Physics)</span>
+              <SidebarMenuButton asChild isActive={isActive('/counselling')} tooltip="Counselling" disabled>
+                <Link href="#"><Headphones /><span>Counselling</span></Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton tooltip="Medical Guide" disabled>
-                <span className="text-2xl">👩‍⚕️</span>
-                  <span>Sanjivani AI</span>
+              <SidebarMenuButton asChild isActive={isActive('/faq')} tooltip="FAQ" disabled>
+                <Link href="#"><HelpCircle /><span>FAQ</span></Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarGroup>
-
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Support">
-              <LifeBuoy />
-              <span>Support</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings">
-              <Settings />
-              <span>Settings</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <div className="flex items-center justify-between p-2 border-t mt-2">
-            <div className="flex items-center gap-3">
-                <UserNav />
-                <div className="flex flex-col">
-                    <span className="text-sm font-medium">Student</span>
-                    <span className="text-xs text-muted-foreground">Free Plan</span>
-                </div>
-            </div>
-            <ShieldCheck className="w-6 h-6 text-primary" />
-        </div>
+         <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton>
+                    <UserPlus />
+                    <span>Login / Sign Up</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
