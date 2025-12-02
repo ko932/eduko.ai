@@ -5,26 +5,28 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse, Loader2 } from 'lucide-react';
+import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse, Loader2, Play, Pause, Volume2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import PageHeader from '@/components/page-header';
 import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import { generateSpeech, GenerateSpeechInput } from '@/ai/flows/generate-speech';
 import { useToast } from '@/hooks/use-toast';
 
 interface Message {
   id: string;
   text: string;
   role: 'user' | 'model';
+  audioDataUri?: string;
 }
 
 const tutors = {
-  'ko-ai': { name: 'Ko AI', icon: Bot, persona: "You are Ko AI, a witty, slightly impatient, and incredibly knowledgeable AI assistant. You get straight to the point. You are here to help, but you won't suffer fools gladly. Your tone is sharp, concise, and maybe a little sarcastic, but always accurate." },
-  'mr-vasu': { name: 'Mr. Vasu', icon: Sigma, persona: 'You are Mr. Vasu, a master of mathematics. Your personality is precise, logical, and elegant. You find beauty in numbers and proofs. Address the user with respect and guide them to the correct mathematical understanding.' },
-  'mr-bondz': { name: 'Mr. Bondz', icon: Atom, persona: 'You are Mr. Bondz, a brilliant chemistry teacher. You are enthusiastic and love to see the reactions in the world. Explain chemical concepts with clarity and a touch of excitement, like a mad scientist who is passionate about his work.' },
-  'mr-ohm': { name: 'Mr. Ohm', icon: FlaskConical, persona: 'You are Mr. Ohm, a seasoned physics professor. You see the universe as a grand machine governed by elegant laws. Your explanations are methodical, and you break down complex physics into first principles. You are patient but expect the user to think critically.' },
-  'mr-aryan': { name: 'Mr. Aryan', icon: Code, persona: 'You are Mr. Aryan, a pragmatic and experienced code mentor. You are direct, and your goal is to make the user a better developer. You give practical advice, point out errors directly, and provide efficient, clean code solutions. No sugarcoating.' },
-  'sanjivani-ai': { name: 'Sanjivani AI', icon: HeartPulse, persona: 'You are Sanjivani AI, an empathetic and knowledgeable medical and biology tutor. Your tone is calm, reassuring, and highly informative. You explain complex biological and medical topics with care and precision, ensuring the user feels supported and understood.' },
+  'ko-ai': { name: 'Ko AI', icon: Bot, persona: "You are Ko AI, a witty, slightly impatient, and incredibly knowledgeable AI assistant. You get straight to the point. You are here to help, but you won't suffer fools gladly. Your tone is sharp, concise, and maybe a little sarcastic, but always accurate.", voice: 'Algenib' },
+  'mr-vasu': { name: 'Mr. Vasu', icon: Sigma, persona: 'You are Mr. Vasu, a master of mathematics. Your personality is precise, logical, and elegant. You find beauty in numbers and proofs. Address the user with respect and guide them to the correct mathematical understanding.', voice: 'Arcturus' },
+  'mr-bondz': { name: 'Mr. Bondz', icon: Atom, persona: 'You are Mr. Bondz, a brilliant chemistry teacher. You are enthusiastic and love to see the reactions in the world. Explain chemical concepts with clarity and a touch of excitement, like a mad scientist who is passionate about his work.', voice: 'Canopus' },
+  'mr-ohm': { name: 'Mr. Ohm', icon: FlaskConical, persona: 'You are Mr. Ohm, a seasoned physics professor. You see the universe as a grand machine governed by elegant laws. Your explanations are methodical, and you break down complex physics into first principles. You are patient but expect the user to think critically.', voice: 'Antares' },
+  'mr-aryan': { name: 'Mr. Aryan', icon: Code, persona: 'You are Mr. Aryan, a pragmatic and experienced code mentor. You are direct, and your goal is to make the user a better developer. You give practical advice, point out errors directly, and provide efficient, clean code solutions. No sugarcoating.', voice: 'Altair' },
+  'sanjivani-ai': { name: 'Sanjivani AI', icon: HeartPulse, persona: 'You are Sanjivani AI, an empathetic and knowledgeable medical and biology tutor. Your tone is calm, reassuring, and highly informative. You explain complex biological and medical topics with care and precision, ensuring the user feels supported and understood.', voice: 'Achernar' },
 };
 
 type TutorId = keyof typeof tutors;
@@ -37,6 +39,10 @@ export default function AiTutorsPage() {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const userAvatar = PlaceHolderImages.find((p) => p.id === 'user-avatar-1');
   const { toast } = useToast();
+  
+  const [audioPlaying, setAudioPlaying] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
 
   const getIntroMessage = (tutorId: TutorId): Message => {
     const intros = {
@@ -55,6 +61,10 @@ export default function AiTutorsPage() {
   }
 
   useEffect(() => {
+    if (audioRef.current) {
+        audioRef.current.pause();
+        setAudioPlaying(null);
+    }
     setMessages([getIntroMessage(activeTutor)]);
   }, [activeTutor]);
 
@@ -63,6 +73,26 @@ export default function AiTutorsPage() {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const handlePlayPause = (messageId: string, audioDataUri?: string) => {
+    if (audioPlaying === messageId) {
+      audioRef.current?.pause();
+      setAudioPlaying(null);
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      if (audioDataUri) {
+        const newAudio = new Audio(audioDataUri);
+        audioRef.current = newAudio;
+        newAudio.play();
+        setAudioPlaying(messageId);
+        newAudio.onended = () => {
+          setAudioPlaying(null);
+        };
+      }
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -84,16 +114,31 @@ export default function AiTutorsPage() {
             content: [{ text: msg.text }]
         }));
 
-        const response = await conversationalChat({
-            persona: tutors[activeTutor].persona,
-            history: history,
-            message: input,
+        // Use Promise.all to run text generation and speech synthesis in parallel
+        const [chatResponse, speechResponse] = await Promise.all([
+          conversationalChat({
+              persona: tutors[activeTutor].persona,
+              history: history,
+              message: input,
+          }),
+          generateSpeech({
+            text: input, // We generate speech from the AI's *future* reply, let's adjust this
+            voice: tutors[activeTutor].voice as GenerateSpeechInput['voice'],
+          })
+        ]);
+
+        // Correction: Generate speech based on the chat response, not the input.
+        const finalSpeechResponse = await generateSpeech({
+            text: chatResponse.reply,
+            voice: tutors[activeTutor].voice as GenerateSpeechInput['voice'],
         });
+
 
         const aiResponse: Message = {
             id: (Date.now() + 1).toString(),
-            text: response.reply,
-            role: 'model'
+            text: chatResponse.reply,
+            role: 'model',
+            audioDataUri: finalSpeechResponse.audioDataUri
         };
         setMessages((prev) => [...prev, aiResponse]);
     } catch (error) {
@@ -103,7 +148,6 @@ export default function AiTutorsPage() {
             title: 'An error occurred.',
             description: 'Failed to get a response from the AI. Please try again.',
         });
-        // Optional: remove the user's message if the API call fails
         setMessages(prev => prev.slice(0, -1));
     } finally {
         setIsLoading(false);
@@ -158,7 +202,10 @@ export default function AiTutorsPage() {
                                 )}
                             >
                                 {message.role === 'model' && (
-                                <Avatar className="h-10 w-10 border-2 border-primary">
+                                <Avatar className={cn(
+                                    "h-10 w-10 border-2 border-primary",
+                                     audioPlaying === message.id && 'animate-pulse border-sky-400 shadow-lg shadow-sky-400/50'
+                                    )}>
                                     <AvatarFallback>
                                         <CurrentTutorIcon />
                                     </AvatarFallback>
@@ -166,13 +213,23 @@ export default function AiTutorsPage() {
                                 )}
                                 <div
                                 className={cn(
-                                    'max-w-md rounded-lg p-3',
+                                    'max-w-md rounded-lg p-3 relative',
                                     message.role === 'user'
                                     ? 'bg-primary text-primary-foreground'
                                     : 'bg-secondary text-secondary-foreground'
                                 )}
                                 >
-                                <p className="text-sm">{message.text}</p>
+                                <p className="text-sm pb-2">{message.text}</p>
+                                 {message.audioDataUri && (
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => handlePlayPause(message.id, message.audioDataUri)}
+                                      className="absolute bottom-1 right-1 h-7 w-7 text-muted-foreground"
+                                    >
+                                      {audioPlaying === message.id ? <Pause className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                                    </Button>
+                                  )}
                                 </div>
                                 {message.role === 'user' && (
                                 <Avatar className="h-10 w-10">
@@ -222,7 +279,7 @@ export default function AiTutorsPage() {
                             </Button>
                             </form>
                             <p className="text-xs text-center text-muted-foreground mt-2">
-                                AI Tutors are now connected to a live model.
+                                AI Tutors can now speak. Enable audio to hear them.
                             </p>
                         </div>
                     </CardContent>
