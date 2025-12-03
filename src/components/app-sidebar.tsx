@@ -99,6 +99,18 @@ const AppSidebar = () => {
              <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
+                isActive={pathname.startsWith('/exam-prep')}
+                tooltip="Exam Prep Hub"
+              >
+                <Link href="/exam-prep">
+                  <BookOpen />
+                  <span>Exam Prep Hub</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
                 isActive={isActive('/project-genx')}
                 tooltip="Project GenX"
               >
@@ -115,7 +127,7 @@ const AppSidebar = () => {
                 tooltip="Smart Notes"
               >
                 <Link href="/smart-notes">
-                  <BookOpen />
+                  <FileText />
                   <span>Smart Notes</span>
                 </Link>
               </SidebarMenuButton>

@@ -11,6 +11,12 @@
       "description": "Abstract image of ocean waves",
       "imageUrl": "https://images.unsplash.com/photo-1514747975201-4715db583da9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvY2VhbiUyMHdhdmVzfGVufDB8fHx8MTc2NDIwNjE1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ocean waves"
+    },
+    {
+      "id": "exam-hero",
+      "description": "Student studying for an exam",
+      "imageUrl": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdHVkZW50JTIwZXhhbXxlbnwwfHx8fDE3NjQ3NTY2NDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student exam"
     }
   ]
 }
