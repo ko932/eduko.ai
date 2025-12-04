@@ -104,41 +104,33 @@ export default function AiTutorsPage() {
       role: 'user',
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const currentMessages = [...messages, userMessage];
+    setMessages(currentMessages);
     setInput('');
     setIsLoading(true);
 
     try {
-        const history: ConversationalChatInput['history'] = messages.map(msg => ({
+        const history: ConversationalChatInput['history'] = currentMessages.map(msg => ({
             role: msg.role,
             content: [{ text: msg.text }]
         }));
 
-        // Use Promise.all to run text generation and speech synthesis in parallel
-        const [chatResponse, speechResponse] = await Promise.all([
-          conversationalChat({
-              persona: tutors[activeTutor].persona,
-              history: history,
-              message: input,
-          }),
-          generateSpeech({
-            text: input, // We generate speech from the AI's *future* reply, let's adjust this
-            voice: tutors[activeTutor].voice as GenerateSpeechInput['voice'],
-          })
-        ]);
+        const chatResponse = await conversationalChat({
+            persona: tutors[activeTutor].persona,
+            history: history,
+            message: input,
+        });
 
-        // Correction: Generate speech based on the chat response, not the input.
-        const finalSpeechResponse = await generateSpeech({
+        const speechResponse = await generateSpeech({
             text: chatResponse.reply,
             voice: tutors[activeTutor].voice as GenerateSpeechInput['voice'],
         });
-
 
         const aiResponse: Message = {
             id: (Date.now() + 1).toString(),
             text: chatResponse.reply,
             role: 'model',
-            audioDataUri: finalSpeechResponse.audioDataUri
+            audioDataUri: speechResponse.audioDataUri
         };
         setMessages((prev) => [...prev, aiResponse]);
     } catch (error) {
@@ -148,7 +140,8 @@ export default function AiTutorsPage() {
             title: 'An error occurred.',
             description: 'Failed to get a response from the AI. Please try again.',
         });
-        setMessages(prev => prev.slice(0, -1));
+        // Revert the user's message on error
+        setMessages(messages);
     } finally {
         setIsLoading(false);
     }
