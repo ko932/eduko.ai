@@ -1,0 +1,275 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "User profile and knowledge summary.",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "education": {
+          "type": "string"
+        },
+        "interests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "knowledgeProfile": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": "number"
+              },
+              "lastPracticed": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "lastInteractions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ts": {
+                "type": "number"
+              },
+              "topic": {
+                "type": "string"
+              },
+              "outcome": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "session": {
+      "title": "Live Mode Session",
+      "description": "Active or past Live Mode session metadata.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ownerUid": {
+          "type": "string"
+        },
+        "tutorId": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "number"
+        },
+        "startedAt": {
+          "type": "number"
+        },
+        "endedAt": {
+          "type": ["number", "null"]
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "env": {
+              "type": "string"
+            },
+            "recording": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "sessionEvent": {
+      "title": "Session Event",
+      "description": "Event log for a session.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["transcript", "action", "question", "answer", "system"]
+        },
+        "authorUid": {
+          "type": ["string", "null"]
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "animation": {
+              "type": "string"
+            },
+            "diagram": {
+              "type": "string"
+            }
+          }
+        },
+        "ts": {
+          "type": "number"
+        }
+      }
+    },
+    "sessionRecording": {
+      "title": "Session Recording Chunk",
+      "description": "Metadata for a chunk of a session recording.",
+      "type": "object",
+      "properties": {
+        "chunkName": {
+          "type": "string"
+        },
+        "startTs": {
+          "type": "number"
+        },
+        "endTs": {
+          "type": "number"
+        },
+        "sizeBytes": {
+          "type": "number"
+        },
+        "transcriptRef": {
+          "type": "string"
+        }
+      }
+    },
+    "asset": {
+      "title": "Asset Registry",
+      "description": "Central registry for avatars, environments, and diagrams.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["avatar", "environment", "diagram"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "storagePath": {
+          "type": "string"
+        },
+        "thumbnail": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uploadedBy": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "number"
+        }
+      }
+    },
+    "knowledgeGraph": {
+      "title": "User Knowledge Graph",
+      "description": "Advanced graph storage per user.",
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "mastery": {
+                "type": "number"
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "updatedAt": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["anonymous", "google.com"]
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": {
+        "$ref": "#/entities/user"
+      },
+      "description": "User profiles and knowledge summaries."
+    },
+    "/sessions/{sessionId}": {
+      "schema": {
+        "$ref": "#/entities/session"
+      },
+      "description": "Live Mode session metadata."
+    },
+    "/sessions/{sessionId}/events/{eventId}": {
+      "schema": {
+        "$ref": "#/entities/sessionEvent"
+      },
+      "description": "Chronological event log for a session."
+    },
+    "/sessions/{sessionId}/recordings/{chunkId}": {
+      "schema": {
+        "$ref": "#/entities/sessionRecording"
+      },
+      "description": "Pointers to audio chunks stored in Firebase Storage."
+    },
+    "/assets/{assetId}": {
+      "schema": {
+        "$ref": "#/entities/asset"
+      },
+      "description": "Central registry for avatars, environments, and diagrams."
+    },
+    "/knowledge_graph/{uid}": {
+      "schema": {
+        "$ref": "#/entities/knowledgeGraph"
+      },
+      "description": "Advanced graph storage per user for tracking mastery."
+    }
+  }
+}
