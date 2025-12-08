@@ -31,7 +31,7 @@ const slides = [
     { title: 'Program Evaluator', text: 'AI analyzes your academic profile.', imageId: 'program-evaluator', link: '/program-evaluator' },
     { title: 'Smart Notes', text: 'Generate top-level AI notes instantly.', imageId: 'smart-notes', link: '/smart-notes' },
     { title: 'Career Compass', text: 'Explore 50+ career paths.', imageId: 'career-compass', link: '/career-compass' },
-    { title: 'Explore Streams', text: 'Find perfect academic streams.', imageId: 'explore-streams', link: '/explore-streams' },
+    { title: 'Explore Streams', text: 'Find perfect academic streams.', imageId: 'explore-streams', link: '/streams' },
     { title: 'Form Central', text: 'Apply for any form in one place.', imageId: 'form-central', link: '/forms' },
     { title: 'Flashcards', text: 'Create and study digital flashcards.', imageId: 'flashcards', link: '/flashcards' },
     { title: 'Quiz Maker', text: 'Generate quizzes on any topic.', imageId: 'quiz-maker', link: '/quiz-maker' },
@@ -140,12 +140,12 @@ export default function DashboardPage() {
       </div>
 
       <div>
-        <h2 className="text-3xl font-headline font-bold mb-6">Your Arsenal</h2>
+        <h2 className="text-2xl font-headline font-bold mb-6">Your Arsenal</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
               <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-4">
-                <item.icon className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                <item.icon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
                 <p className="mt-2 text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
                   {item.label}
                 </p>
