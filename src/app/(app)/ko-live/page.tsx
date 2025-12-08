@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
+import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronsRight, BookOpen, HelpCircle, FileText, X, Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
