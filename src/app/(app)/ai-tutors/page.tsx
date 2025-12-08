@@ -16,7 +16,7 @@ export default function AiTutorsPage() {
                         <p className="text-muted-foreground text-sm">Your personal AI command center.</p>
                     </div>
                 </div>
-                <Button asChild>
+                <Button asChild className="bg-primary/80 hover:bg-primary shadow-[0_0_15px] shadow-primary/50 text-primary-foreground">
                     <Link href="/ko-live">
                         Go Live with Ko
                     </Link>

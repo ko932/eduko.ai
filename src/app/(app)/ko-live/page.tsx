@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronsLeft, BookOpen, HelpCircle, FileText, X, Mic, Waves } from 'lucide-react';
+import { ChevronsRight, BookOpen, HelpCircle, FileText, X, Mic, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,19 +27,19 @@ const modes = {
 type Mode = keyof typeof modes;
 
 const Particle = ({ characteristics }: { characteristics: any }) => {
-  const { initialX, initialY, radius } = characteristics;
+  const { initialX, initialY, radius, vw, vh } = characteristics;
   return (
     <motion.circle
-      cx={initialX}
-      cy={initialY}
+      cx={initialX * vw}
+      cy={initialY * vh}
       r={radius}
-      fill="rgba(0, 175, 255, 0.2)"
+      fill="rgba(38, 163, 255, 0.15)"
       animate={{
-        x: [initialX, initialX + 20, initialX - 20, initialX],
-        y: [initialY, initialY + 20, initialY - 20, initialY],
+        x: [initialX * vw, (initialX + (Math.random() - 0.5) * 0.1) * vw],
+        y: [initialY * vh, (initialY + (Math.random() - 0.5) * 0.1) * vh],
       }}
       transition={{
-        duration: 15 + Math.random() * 10,
+        duration: 20 + Math.random() * 20,
         repeat: Infinity,
         repeatType: 'reverse',
         ease: 'easeInOut',
@@ -50,26 +50,36 @@ const Particle = ({ characteristics }: { characteristics: any }) => {
 
 
 const ParticleAnimation = () => {
-    const vw = typeof window !== 'undefined' ? window.innerWidth : 1000;
-    const vh = typeof window !== 'undefined' ? window.innerHeight : 1000;
+    const [vw, setVw] = useState(1000);
+    const [vh, setVh] = useState(1000);
+
+    React.useEffect(() => {
+        const updateSize = () => {
+            setVw(window.innerWidth);
+            setVh(window.innerHeight);
+        };
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+
     const numParticles = 80;
 
     const particles = useMemo(() => {
         return Array.from({ length: numParticles }).map(() => {
-        const initialX = Math.random() * vw;
-        const initialY = Math.random() * vh;
         return {
-            initialX,
-            initialY,
+            initialX: Math.random(),
+            initialY: Math.random(),
             radius: Math.random() * 1.5 + 0.5,
+            vw,
+            vh
         };
         });
     }, [vw, vh]);
 
     return (
         <svg
-        className="absolute inset-0 w-full h-full opacity-50"
-        viewBox={`0 0 ${vw} ${vh}`}
+        className="absolute inset-0 w-full h-full"
         preserveAspectRatio="xMidYMid slice"
         >
         {particles.map((characteristics, i) => (
@@ -79,23 +89,22 @@ const ParticleAnimation = () => {
     );
 };
 
-
 export default function KoLivePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeMode, setActiveMode] = useState<Mode>('learning');
 
   return (
-    <div className="relative flex items-center justify-center w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#0A0A0F] to-[#000000] rounded-xl overflow-hidden">
+    <div className="relative flex items-center justify-center w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#071133] to-[#08183a] rounded-xl overflow-hidden">
       <ParticleAnimation />
 
       {/* Sidebar Trigger */}
       <AnimatePresence>
         {!isSidebarOpen && (
           <motion.div
-            initial={{ opacity: 0, left: -20 }}
-            animate={{ opacity: 1, left: 16 }}
-            exit={{ opacity: 0, left: -20 }}
-            className="absolute top-4 left-4 z-30"
+            initial={{ opacity: 0, right: -20 }}
+            animate={{ opacity: 1, right: 16 }}
+            exit={{ opacity: 0, right: -20 }}
+            className="absolute top-4 right-4 z-30"
           >
             <Button
               variant="ghost"
@@ -103,21 +112,21 @@ export default function KoLivePage() {
               onClick={() => setIsSidebarOpen(true)}
               className="text-white hover:bg-white/10 hover:text-white"
             >
-              <ChevronsLeft className="rotate-180" />
+              <ChevronsRight className="rotate-180" />
             </Button>
           </motion.div>
         )}
       </AnimatePresence>
       
-      {/* Left Sidebar */}
+      {/* Right Sidebar */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            initial={{ x: '-100%' }}
+            initial={{ x: '100%' }}
             animate={{ x: '0%' }}
-            exit={{ x: '-100%' }}
+            exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="absolute top-0 left-0 h-full w-80 z-20 p-4"
+            className="absolute top-0 right-0 h-full w-80 z-20 p-4"
           >
             <div className="h-full w-full bg-black/30 backdrop-blur-xl border border-primary/20 rounded-2xl p-4 flex flex-col">
               <div className="flex justify-between items-center mb-6">
@@ -170,7 +179,6 @@ export default function KoLivePage() {
                   );
                 })}
               </div>
-
             </div>
           </motion.div>
         )}
@@ -180,33 +188,42 @@ export default function KoLivePage() {
       <motion.div 
         className="relative z-10 text-center flex flex-col items-center w-full h-full"
         animate={{
-            paddingLeft: isSidebarOpen ? '21rem' : '1rem',
+            paddingRight: isSidebarOpen ? '21rem' : '1rem',
             transition: { type: 'spring', stiffness: 300, damping: 30 }
         }}
        >
          <div className="w-full h-full flex flex-col items-center justify-center">
-            
-            <div className="w-full text-center mb-4">
-                 <h1 className="text-2xl font-headline font-bold text-primary relative inline-block">
-                    Ko AI — Live Interactive Mode
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary/50 shadow-[0_0_10px] shadow-primary"></span>
-                 </h1>
-            </div>
+            <motion.div 
+              className="text-center"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-2xl md:text-3xl font-headline font-bold text-white relative">
+                Welcome to the future of class — Ko AI’s class
+                <motion.span 
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-primary"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
+                />
+              </h1>
+            </motion.div>
 
             <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-4 w-[60%] h-72 border-2 border-dashed border-primary/30 rounded-2xl flex items-center justify-center bg-black/20 backdrop-blur-sm"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-8 w-[90%] md:w-[60%] h-72 border-2 border-dashed border-primary/30 rounded-2xl flex items-center justify-center bg-black/20 backdrop-blur-sm"
             >
-            <p className="text-primary/70">[ 3D AI Tutor: Ko AI Renders Here ]</p>
+              <p className="text-primary/70">[ 3D AI Tutor: Ko AI Renders Here ]</p>
             </motion.div>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="mt-6 w-[80%] max-w-2xl p-4 rounded-lg bg-black/20 backdrop-blur-md border border-white/10"
+                className="mt-6 w-[90%] max-w-2xl p-4 rounded-lg bg-black/20 backdrop-blur-md border border-white/10"
             >
                 <p className="text-sm text-blue-100/80">
                     This is the Explanation Panel. AI-generated text, diagrams, and step-by-step guidance will appear here in real-time.
@@ -217,19 +234,22 @@ export default function KoLivePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="mt-6 w-[80%] max-w-2xl flex items-center justify-center gap-4">
-                <Textarea placeholder="Type your message..." className="bg-black/30 border-primary/30 focus-visible:ring-primary" />
-                <Button size="icon" className="h-10 w-10 bg-primary/80 hover:bg-primary shadow-[0_0_15px] shadow-primary/50">
-                    <Mic className="h-5 w-5" />
-                </Button>
-                <div className="flex items-center gap-2 text-primary">
-                    <Waves className="w-6 h-6"/>
-                    <span className="text-sm">TTS</span>
+              className="mt-6 w-[90%] max-w-2xl flex items-center justify-center gap-4"
+            >
+                <div className="relative w-full">
+                  <Textarea placeholder="Type or say something..." className="bg-black/30 border-primary/30 focus-visible:ring-primary pr-24" />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <Button size="icon" variant="ghost" className="text-primary hover:text-cyan-300 hover:bg-primary/10">
+                        <Mic className="h-5 w-5" />
+                    </Button>
+                     <Button size="icon" className="bg-primary/80 hover:bg-primary shadow-[0_0_15px] shadow-primary/50">
+                        <Send className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
             </motion.div>
         </div>
       </motion.div>
-
     </div>
   );
 }
