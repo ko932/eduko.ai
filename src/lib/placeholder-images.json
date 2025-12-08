@@ -27,8 +27,8 @@
     {
       "id": "program-evaluator",
       "description": "Banner for Program Evaluator",
-      "imageUrl": "https://images.unsplash.com/photo-1653379671970-4cf352264daf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxhY2FkZW1pYyUyMHByb2ZpbGV8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "academic profile"
+      "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbmFseXRpY3N8ZW58MHx8fHwxNzY1ODQxNjU4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "analytics chart"
     },
     {
       "id": "smart-notes",
@@ -57,7 +57,7 @@
     {
       "id": "flashcards",
       "description": "Banner for Flashcards",
-      "imageUrl": "https://images.unsplash.com/photo-1668852222395-11d9154ade25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkaWdpdGFsJTIwZmxhc2hjYXJkc3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1668852222395-11d9154ade25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxkaWdpdGFsJTIwZmxhc2hjYXJkc3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "digital flashcards"
     },
     {
@@ -99,7 +99,7 @@
     {
       "id": "physics-tutor",
       "description": "Banner for AI Physics Tutor",
-      "imageUrl": "https://images.unsplash.com/photo-1758685734303-e85757067f28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaHlzaWNzJTIwY29uY2VwdHN8ZW58MHx8fHwxNzY1MDgyODEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1758685734303-e85757067f28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwaHlzaWNzJTIwY29uY2VwdHN8ZW58MHx8fHwxNzY1MDgyODEwfDA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "physics concepts"
     },
     {
@@ -111,13 +111,13 @@
     {
       "id": "medical-tutor",
       "description": "Banner for Medical Tutor",
-      "imageUrl": "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwYmlvbG9neXxlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtZWRpY2FsJTIwYmlvbG9neXxlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlibrb-4.1.0&q=80&w=1080",
       "imageHint": "medical biology"
     },
     {
       "id": "project-genx",
       "description": "Banner for Project GenX",
-      "imageUrl": "https://images.unsplash.com/photo-1721244653585-9a60e4c7a12e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9qZWN0JTIwYmx1ZXByaW50c3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1721244653585-9a60e4c7a12e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwcm9qZWN0JTIwYmx1ZXByaW50c3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "project blueprints"
     }
   ]
