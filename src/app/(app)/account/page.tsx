@@ -92,7 +92,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="mb-12">
-        <div className="max-w-xl mx-auto mb-8">
+        <div className="max-w-2xl mx-auto mb-8">
             <div className="flex flex-col justify-center bg-card/50 rounded-lg p-8">
                 <h1 className="text-3xl font-headline font-bold mb-2">Welcome back, Warrior</h1>
                 <p className="text-muted-foreground mb-6">This is your command center. Stay focused, stay sharp.</p>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                 )}
             </div>
         </div>
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-2xl mx-auto">
             <Carousel className="w-full" opts={{ loop: true }}>
                 <CarouselContent>
                 {slides.map((slide, index) => {
@@ -143,13 +143,13 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto">
+      <div className="max-w-2xl mx-auto">
         <h2 className="text-xl font-headline font-bold mb-4 text-center">Your Arsenal</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
               <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2">
-                <item.icon className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
+                <item.icon className="h-10 w-10 text-muted-foreground group-hover:text-primary transition-colors" />
                 <p className="mt-2 text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors leading-tight">
                   {item.label}
                 </p>
