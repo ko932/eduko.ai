@@ -1,3 +1,4 @@
+
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -28,15 +29,34 @@ const arsenalItems = [
   { icon: Bot, label: 'Ko AI', href: '/ko-chat' },
   { icon: Wrench, label: 'Tools', href: '/tools' },
   { icon: Compass, label: 'Career', href: '/program-evaluator' },
-  { icon: FileText, label: 'Exams', href: '#' },
+  { icon: FileText, label: 'Exams', href: '/exam-prep' },
   { icon: FileText, label: 'Form Central', href: '/forms' },
   { icon: Headphones, label: 'Counselling', href: '#' },
   { icon: Store, label: 'Store', href: '#' },
   { icon: DollarSign, label: 'Pricing Plans', href: '#' },
 ];
 
+const dailyQuotes = [
+    { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+    { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+    { quote: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+    { quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+    { quote: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+    { quote: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+    { quote: "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.", author: "Thomas A. Edison" },
+    { quote: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+    { quote: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+    { quote: "The will to win, the desire to succeed, the urge to reach your full potential... these are the keys that will unlock the door to personal excellence.", author: "Confucius" },
+];
+
+
 export default function DashboardPage() {
     const oceanImage = PlaceHolderImages.find(p => p.id === 'ocean-waves');
+    
+    // Get a quote for the day
+    const dayOfMonth = new Date().getDate();
+    const quote = dailyQuotes[dayOfMonth % dailyQuotes.length];
+
   return (
     <>
       {/* Hero Section */}
@@ -48,8 +68,8 @@ export default function DashboardPage() {
           This is your command center. Stay focused, stay sharp.
         </p>
         <blockquote className="mt-6 border-l-2 border-primary pl-4 italic text-muted-foreground">
-          &quot;The best way to predict the future is to create it.&quot;
-          <cite className="block not-italic text-right mt-2">- Peter Drucker</cite>
+          &quot;{quote.quote}&quot;
+          <cite className="block not-italic text-right mt-2">- {quote.author}</cite>
         </blockquote>
       </div>
 
