@@ -112,7 +112,7 @@ export default function DashboardPage() {
                     return (
                     <CarouselItem key={index}>
                         <Link href={slide.link}>
-                        <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-1 bg-secondary">
+                        <div className="relative aspect-[40/12] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-1 bg-secondary">
                             {image && (
                             <Image
                                 src={image.imageUrl}
@@ -145,7 +145,7 @@ export default function DashboardPage() {
 
       <div className="max-w-xl mx-auto">
         <h2 className="text-xl font-headline font-bold mb-4 text-center">Your Arsenal</h2>
-        <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
               <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2">
