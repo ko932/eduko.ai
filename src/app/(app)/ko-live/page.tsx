@@ -1,8 +1,7 @@
 'use client';
-import { useState, useMemo } from 'react';
-import * as React from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronsRight, BookOpen, HelpCircle, FileText, X, Mic, Send } from 'lucide-react';
+import { ChevronsLeft, BookOpen, HelpCircle, FileText, X, Mic, Send, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -34,7 +33,7 @@ const Particle = ({ characteristics }: { characteristics: any }) => {
       cx={initialX * vw}
       cy={initialY * vh}
       r={radius}
-      fill="rgba(38, 163, 255, 0.15)"
+      fill="rgba(0, 175, 255, 0.08)"
       animate={{
         x: [initialX * vw, (initialX + (Math.random() - 0.5) * 0.1) * vw],
         y: [initialY * vh, (initialY + (Math.random() - 0.5) * 0.1) * vh],
@@ -95,51 +94,22 @@ export default function KoLivePage() {
   const [activeMode, setActiveMode] = useState<Mode>('learning');
 
   return (
-    <div className="relative flex items-center justify-center w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#071133] to-[#08183a] rounded-xl overflow-hidden">
+    <div className="relative flex w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#000000] to-[#0A0A0F] rounded-xl overflow-hidden">
       <ParticleAnimation />
-
-      {/* Sidebar Trigger */}
-      <AnimatePresence>
-        {!isSidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0, right: -20 }}
-            animate={{ opacity: 1, right: 16 }}
-            exit={{ opacity: 0, right: -20 }}
-            className="absolute top-4 right-4 z-30"
-          >
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSidebarOpen(true)}
-              className="text-white hover:bg-white/10 hover:text-white"
-            >
-              <ChevronsRight className="rotate-180" />
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
       
-      {/* Right Sidebar */}
+      {/* Left Internal Sidebar */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: '0%' }}
-            exit={{ x: '100%' }}
+            exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="absolute top-0 right-0 h-full w-80 z-20 p-4"
+            className="absolute top-0 left-0 h-full w-72 z-20 p-4"
           >
-            <div className="h-full w-full bg-black/30 backdrop-blur-xl border border-primary/20 rounded-2xl p-4 flex flex-col">
+            <div className="h-full w-full bg-black/50 backdrop-blur-xl border border-primary/20 rounded-2xl p-4 flex flex-col">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="font-headline font-bold text-lg text-white">Live Mode</h2>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsSidebarOpen(false)}
-                  className="text-white/70 hover:bg-white/10 hover:text-white h-7 w-7"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
+                <h2 className="font-headline font-bold text-lg text-white">Live Modes</h2>
               </div>
 
               <div className="space-y-2">
@@ -173,9 +143,6 @@ export default function KoLivePage() {
                           {mode.title}
                         </span>
                       </div>
-                      <p className="text-xs text-white/60 mt-1 pl-8">
-                        {mode.description}
-                      </p>
                     </button>
                   );
                 })}
@@ -187,12 +154,24 @@ export default function KoLivePage() {
 
       {/* Main Canvas Content */}
       <motion.div 
-        className="relative z-10 text-center flex flex-col items-center w-full h-full"
+        className="relative z-10 text-center flex flex-col items-center w-full h-full p-6"
         animate={{
-            paddingRight: isSidebarOpen ? '21rem' : '1rem',
+            paddingLeft: isSidebarOpen ? '20rem' : '5rem',
             transition: { type: 'spring', stiffness: 300, damping: 30 }
         }}
        >
+         {/* Sidebar Trigger */}
+        <div className="absolute top-4 left-4 z-30">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="text-white hover:bg-white/10 hover:text-white"
+            >
+              {isSidebarOpen ? <X /> : <ChevronsLeft className="rotate-180" />}
+            </Button>
+        </div>
+
          <div className="w-full h-full flex flex-col items-center justify-center">
             <motion.div 
               className="text-center"
@@ -200,10 +179,10 @@ export default function KoLivePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-2xl md:text-3xl font-headline font-bold text-white relative">
-                Welcome to the future of class — Ko AI’s class
+              <h1 className="text-xl md:text-2xl font-headline font-bold text-primary relative">
+                Ko AI — Live Interactive Mode
                 <motion.span 
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-primary"
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-primary/70"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
@@ -215,20 +194,12 @@ export default function KoLivePage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="mt-8 w-[90%] md:w-[60%] h-72 border-2 border-dashed border-primary/30 rounded-2xl flex items-center justify-center bg-black/20 backdrop-blur-sm"
+              className="mt-8 w-[90%] md:w-[60%] h-96 border-2 border-dashed border-primary/30 rounded-2xl flex items-center justify-center bg-black/20 backdrop-blur-sm"
             >
-              <p className="text-primary/70">[ 3D AI Tutor: Ko AI Renders Here ]</p>
-            </motion.div>
-
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="mt-6 w-[90%] max-w-2xl p-4 rounded-lg bg-black/20 backdrop-blur-md border border-white/10"
-            >
-                <p className="text-sm text-blue-100/80">
-                    This is the Explanation Panel. AI-generated text, diagrams, and step-by-step guidance will appear here in real-time.
-                </p>
+              <div className="flex flex-col items-center gap-4 text-primary/70">
+                <Bot size={64}/>
+                <p>[ 3D AI Tutor: Ko AI Renders Here ]</p>
+              </div>
             </motion.div>
 
             <motion.div 

@@ -12,7 +12,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Button variant="ghost" asChild>
                 <Link href="#">Login</Link>
             </Button>
-            <Button asChild>
+            <Button asChild variant="destructive" className="shadow-[0_0_15px] shadow-red-500/50">
                 <Link href="#">Sign Up</Link>
             </Button>
         </header>
