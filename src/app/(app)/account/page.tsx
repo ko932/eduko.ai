@@ -128,7 +128,7 @@ export default function DashboardPage() {
                 return (
                 <CarouselItem key={index}>
                     <Link href={slide.link}>
-                      <div className="relative aspect-[21/9] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-8 bg-secondary">
+                      <div className="relative aspect-[28/9] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-6 bg-secondary">
                         {image && (
                         <Image
                             src={image.imageUrl}
@@ -140,10 +140,10 @@ export default function DashboardPage() {
                         />
                         )}
                         <div className="relative z-10">
-                        <h1 className="text-2xl md:text-3xl font-bold font-headline tracking-tight">
+                        <h1 className="text-xl md:text-2xl font-bold font-headline tracking-tight">
                             {slide.title}
                         </h1>
-                        <p className="mt-2 max-w-2xl text-base">
+                        <p className="mt-1 max-w-2xl text-sm">
                             {slide.text}
                         </p>
                         </div>
