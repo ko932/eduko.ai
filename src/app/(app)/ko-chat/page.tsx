@@ -1,178 +1,239 @@
 'use client';
-import { useState, useRef, useEffect, FormEvent } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronsRight, BookOpen, HelpCircle, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User, Loader2 } from 'lucide-react';
-import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
-import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
-const XiIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-primary">
-      <path d="m18.5 4-5 5-5-5"/>
-      <path d="m18.5 20-5-5-5 5"/>
-      <path d="M12 3v18"/>
-    </svg>
-  );
+const modes = {
+  learning: {
+    icon: BookOpen,
+    title: 'Learning Mode',
+    description: 'Engage in guided lessons and explore new concepts with your AI tutor.',
+  },
+  doubt: {
+    icon: HelpCircle,
+    title: 'Doubt Mode',
+    description: 'Ask any question and get instant, step-by-step solutions.',
+  },
+  exam: {
+    icon: FileText,
+    title: 'Exam Mode',
+    description: 'Simulate exam conditions and test your knowledge under pressure.',
+  },
+};
 
-interface Message {
-  id: string;
-  text: string;
-  role: 'user' | 'model';
-}
+type Mode = keyof typeof modes;
 
-const koPersona = "You are Ko AI, a witty, slightly impatient, and incredibly knowledgeable AI assistant. You get straight to the point. You are here to help, but you won't suffer fools gladly. Your tone is sharp, concise, and maybe a little sarcastic, but always accurate.";
-
-export default function KoChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Alright, what's on your mind? I haven't got all day. Ask me anything, but make it interesting.",
-      role: 'model',
-    },
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const userAvatar = PlaceHolderImages.find((p) => p.id === 'user-avatar-1');
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: input,
-      role: 'user',
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
-    try {
-        const history: ConversationalChatInput['history'] = messages.map(msg => ({
-            role: msg.role,
-            content: [{ text: msg.text }]
-        }));
-
-        const response = await conversationalChat({
-            persona: koPersona,
-            history: history,
-            message: input,
-        });
-
-        const aiResponse: Message = {
-            id: (Date.now() + 1).toString(),
-            text: response.reply,
-            role: 'model'
-        };
-        setMessages((prev) => [...prev, aiResponse]);
-    } catch (error) {
-        console.error("Failed to get AI response:", error);
-        toast({
-            variant: 'destructive',
-            title: 'An error occurred.',
-            description: 'Failed to get a response from Ko AI. Please try again.',
-        });
-        setMessages(prev => prev.slice(0, -1));
-    } finally {
-        setIsLoading(false);
-    }
-  };
-  
+const Particle = ({ characteristics, vw, vh }: { characteristics: any, vw: number, vh: number }) => {
+  const { x, y, initialX, initialY, radius } = characteristics;
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
-        <div className="flex items-center gap-2 mb-4">
-            <XiIcon />
-            <h1 className="text-2xl font-bold font-headline">Ko AI Chat</h1>
-        </div>
-      <div ref={scrollAreaRef} className="flex-1 overflow-y-auto pr-4 space-y-6">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={cn(
-              'flex items-start gap-4',
-              message.role === 'user' ? 'justify-end' : 'justify-start'
-            )}
-          >
-            {message.role === 'model' && (
-              <Avatar className="h-10 w-10 border-2 border-primary">
-                <AvatarFallback>
-                  <Bot />
-                </AvatarFallback>
-              </Avatar>
-            )}
-            <div
-              className={cn(
-                'max-w-md rounded-lg p-3',
-                message.role === 'user'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground'
-              )}
-            >
-              <p className="text-sm">{message.text}</p>
-            </div>
-            {message.role === 'user' && (
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={userAvatar?.imageUrl} alt="User" />
-                <AvatarFallback>
-                  <User />
-                </AvatarFallback>
-              </Avatar>
-            )}
-          </div>
+    <motion.circle
+      cx={x}
+      cy={y}
+      r={radius}
+      fill="rgba(38, 163, 255, 0.3)"
+      animate={{
+        x: [initialX, initialX + 20, initialX - 20, initialX],
+        y: [initialY, initialY + 20, initialY - 20, initialY],
+      }}
+      transition={{
+        duration: 15 + Math.random() * 10,
+        repeat: Infinity,
+        repeatType: 'reverse',
+        ease: 'easeInOut',
+      }}
+    />
+  );
+};
+
+
+const ParticleAnimation = () => {
+    const vw = 1000;
+    const vh = 1000;
+    const numParticles = 80;
+
+    const particles = useMemo(() => {
+        return Array.from({ length: numParticles }).map(() => {
+        const initialX = Math.random() * vw;
+        const initialY = Math.random() * vh;
+        return {
+            x: initialX,
+            y: initialY,
+            initialX,
+            initialY,
+            radius: Math.random() * 1.5 + 0.5,
+        };
+        });
+    }, [vw, vh]);
+
+    return (
+        <svg
+        className="absolute inset-0 w-full h-full opacity-30"
+        viewBox={`0 0 ${vw} ${vh}`}
+        preserveAspectRatio="xMidYMid slice"
+        >
+        {particles.map((characteristics, i) => (
+            <Particle key={i} characteristics={characteristics} vw={vw} vh={vh} />
         ))}
-         {isLoading && (
-            <div className="flex items-start gap-4 justify-start">
-                <Avatar className="h-10 w-10 border-2 border-primary">
-                    <AvatarFallback>
-                        <Bot />
-                    </AvatarFallback>
-                </Avatar>
-                <div className="max-w-md rounded-lg p-3 bg-secondary text-secondary-foreground">
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                </div>
-            </div>
-        )}
-      </div>
-      <div className="mt-auto pt-4">
-        <form onSubmit={handleSubmit} className="relative">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me anything, if you dare..."
-            className="pr-20 min-h-[4rem]"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e);
-              }
+        </svg>
+    );
+};
+
+
+export default function KoLiveModePage() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeMode, setActiveMode] = useState<Mode>('learning');
+
+  const ModeIcon = modes[activeMode].icon;
+
+  return (
+    <div className="relative flex items-center justify-center w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#071133] to-[#08183a] rounded-xl overflow-hidden">
+      <ParticleAnimation />
+
+      {/* Main Canvas Content */}
+      <div className="relative z-10 text-center flex flex-col items-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-4xl md:text-5xl font-headline font-bold text-white tracking-tight"
+        >
+          <motion.span
+            animate={{
+              opacity: [0.7, 1, 0.7],
+              textShadow: [
+                '0 0 8px rgba(38, 163, 255, 0.4)',
+                '0 0 16px rgba(38, 163, 255, 0.6)',
+                '0 0 8px rgba(38, 163, 255, 0.4)',
+              ],
             }}
-            disabled={isLoading}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            className="absolute right-3 top-1/2 -translate-y-1/2"
-            disabled={!input.trim() || isLoading}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              repeatType: 'mirror',
+            }}
           >
-            <Send className="h-4 w-4" />
-          </Button>
-        </form>
-         <p className="text-xs text-center text-muted-foreground mt-2">
-            Ko AI is now connected to a live model.
-          </p>
+            Welcome to the future of class
+          </motion.span>
+          <br />
+          <span className="text-2xl md:text-3xl">— Ko AI’s class —</span>
+        </motion.h1>
+
+        <motion.div
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         transition={{ duration: 0.8, delay: 0.6 }}
+         className="mt-12 w-[60%] h-72 border-2 border-dashed border-blue-400/30 rounded-2xl flex items-center justify-center bg-black/10 backdrop-blur-sm"
+        >
+          <p className="text-blue-200/70">[ 3D AI Tutor Renders Here ]</p>
+        </motion.div>
+
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="mt-6 w-[80%] max-w-2xl p-4 rounded-lg bg-white/5 backdrop-blur-md border border-white/10"
+        >
+            <p className="text-sm text-blue-100/80">
+                This is the Explanation Panel. AI-generated text, diagrams, and step-by-step guidance will appear here in real-time.
+            </p>
+        </motion.div>
       </div>
+
+      {/* Sidebar Trigger */}
+      <AnimatePresence>
+        {!isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0, right: -20 }}
+            animate={{ opacity: 1, right: 16 }}
+            exit={{ opacity: 0, right: -20 }}
+            className="absolute top-4 right-4 z-30"
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsSidebarOpen(true)}
+              className="text-white hover:bg-white/10 hover:text-white"
+            >
+              <ChevronsRight />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Right Sidebar */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: '0%' }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="absolute top-0 right-0 h-full w-80 z-20 p-4"
+          >
+            <div className="h-full w-full bg-black/10 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-headline font-bold text-lg text-white">Live Mode</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="text-white/70 hover:bg-white/10 hover:text-white h-7 w-7"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="space-y-2">
+                {Object.keys(modes).map((key) => {
+                  const mode = modes[key as Mode];
+                  const isActive = activeMode === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setActiveMode(key as Mode)}
+                      className={cn(
+                        'w-full text-left p-3 rounded-lg border transition-all duration-200',
+                        isActive
+                          ? 'bg-white/20 border-blue-400/50 shadow-lg'
+                          : 'bg-white/5 border-transparent hover:bg-white/10'
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <mode.icon
+                          className={cn(
+                            'h-5 w-5 transition-colors',
+                            isActive ? 'text-blue-300' : 'text-white/60'
+                          )}
+                        />
+                        <span
+                          className={cn(
+                            'font-semibold transition-colors',
+                            isActive ? 'text-white' : 'text-white/80'
+                          )}
+                        >
+                          {mode.title}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white/60 mt-1 pl-8">
+                        {mode.description}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+
+               <div className="mt-auto">
+                    <div className="w-full h-24 bg-white/5 rounded-lg flex items-center justify-center">
+                        <p className="text-white/40 text-sm">Chat Input Area</p>
+                    </div>
+                </div>
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
