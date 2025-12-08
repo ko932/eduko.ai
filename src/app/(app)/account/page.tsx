@@ -109,7 +109,7 @@ export default function DashboardPage() {
                 return (
                 <CarouselItem key={index}>
                     <Link href={slide.link}>
-                      <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-2 bg-secondary">
+                      <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-1 bg-secondary">
                         {image && (
                         <Image
                             src={image.imageUrl}
@@ -121,10 +121,10 @@ export default function DashboardPage() {
                         />
                         )}
                         <div className="relative z-10">
-                        <h1 className="text-xl md:text-2xl font-bold font-headline tracking-tight">
+                        <h1 className="text-base md:text-lg font-bold font-headline tracking-tight">
                             {slide.title}
                         </h1>
-                        <p className="mt-1 max-w-2xl text-sm">
+                        <p className="mt-1 max-w-2xl text-xs">
                             {slide.text}
                         </p>
                         </div>
@@ -139,14 +139,14 @@ export default function DashboardPage() {
         </Carousel>
       </div>
 
-      <div>
-        <h2 className="text-xl font-headline font-bold mb-4">Your Arsenal</h2>
-        <div className="grid grid-cols-4 gap-4">
+      <div className="max-w-md mx-auto">
+        <h2 className="text-lg font-headline font-bold mb-3 text-center">Your Arsenal</h2>
+        <div className="grid grid-cols-4 gap-3">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
-              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2">
+              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-1">
                 <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                <p className="mt-1.5 text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors">
+                <p className="mt-1 text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors leading-tight">
                   {item.label}
                 </p>
               </Card>
