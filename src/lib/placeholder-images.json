@@ -17,6 +17,42 @@
       "description": "Student studying for an exam",
       "imageUrl": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdHVkZW50JTIwZXhhbXxlbnwwfHx8fDE3NjQ3NTY2NDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "student exam"
+    },
+    {
+      "id": "smart-doubt-solver",
+      "description": "Banner for Smart Doubt Solver",
+      "imageUrl": "https://images.unsplash.com/photo-1743767587861-2a932969286e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmdXR1cmlzdGljJTIwZWR1Y2F0aW9ufGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic education"
+    },
+    {
+      "id": "ai-lecture-notes",
+      "description": "Banner for AI Lecture Notes",
+      "imageUrl": "https://images.unsplash.com/photo-1655891709727-1506dff4af97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMGxlYXJuaW5nfGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "AI learning"
+    },
+    {
+      "id": "revision-planner",
+      "description": "Banner for Revision Planner",
+      "imageUrl": "https://images.unsplash.com/photo-1606242403120-0d1997a32486?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkaWdpdGFsJTIwcGxhbm5lcnxlbnwwfHx8fDE3NjUxODAzOTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital planner"
+    },
+    {
+      "id": "mock-tests-analytics",
+      "description": "Banner for Mock Tests & Analytics",
+      "imageUrl": "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkYXRhJTIwYW5hbHl0aWNzfGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "data analytics"
+    },
+    {
+      "id": "eduko-ai-chat",
+      "description": "Banner for Eduko AI Chat",
+      "imageUrl": "https://images.unsplash.com/photo-1684369175809-f9642140a1bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxBSSUyMGNoYXRib3R8ZW58MHx8fHwxNzY1MTczOTMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "AI chatbot"
+    },
+    {
+      "id": "career-guidance",
+      "description": "Banner for Career Guidance",
+      "imageUrl": "https://images.unsplash.com/photo-1516618317270-b99d1715c58d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYXJlZXIlMjBwYXRofGVufDB8fHx8MTc2NTE3NzkzNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "career path"
     }
   ]
 }
