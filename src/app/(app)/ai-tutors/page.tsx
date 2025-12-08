@@ -3,17 +3,20 @@ import { useState, useEffect, FormEvent, useRef } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { BrainCircuit, Mic, Send } from 'lucide-react';
+import { BrainCircuit, Mic, Send, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { conversationalChat, type ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import {
+  conversationalChat,
+  type ConversationalChatInput,
+} from '@/ai/flows/conversational-chat';
 import { generateSpeech } from '@/ai/flows/generate-speech';
 
 // Check for SpeechRecognition API
 const SpeechRecognition =
-  (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition));
-
+  typeof window !== 'undefined' &&
+  (window.SpeechRecognition || window.webkitSpeechRecognition);
 
 const welcomeMessages = [
   'Hello, Warrior. I’m Ko, your personal AI mentor.\nAsk me anything — I’m here to guide you, train you, and help you grow.',
@@ -25,6 +28,7 @@ const welcomeMessages = [
 ];
 
 type Message = {
+  id: string;
   role: 'user' | 'model';
   content: string;
 };
@@ -34,7 +38,9 @@ export default function AiTutorsPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const dayOfYear = Math.floor(
@@ -43,6 +49,7 @@ export default function AiTutorsPage() {
     );
     setMessages([
       {
+        id: 'welcome-message',
         role: 'model',
         content: welcomeMessages[dayOfYear % welcomeMessages.length],
       },
@@ -69,8 +76,8 @@ export default function AiTutorsPage() {
 
   const handleMicClick = () => {
     if (!SpeechRecognition) {
-        alert("Your browser doesn't support speech recognition.");
-        return;
+      alert("Your browser doesn't support speech recognition.");
+      return;
     }
     if (isListening) {
       recognitionRef.current.stop();
@@ -82,46 +89,97 @@ export default function AiTutorsPage() {
     }
   };
 
-  const playAudio = (audioDataUri: string) => {
-    const audio = new Audio(audioDataUri);
-    audio.play();
+  const stopAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setPlayingAudioId(null);
+      audioRef.current = null;
+    }
   };
+
+  const handleReadAloud = async (message: Message) => {
+    if (playingAudioId === message.id) {
+      stopAudio();
+      return;
+    }
+
+    if (playingAudioId) {
+      stopAudio();
+    }
+    
+    setPlayingAudioId(message.id);
+    try {
+      const speechResult = await generateSpeech({ text: message.content, voice: 'Arcturus' });
+      const audio = new Audio(speechResult.audioDataUri);
+      audioRef.current = audio;
+      audio.play();
+      audio.onended = () => {
+        setPlayingAudioId(null);
+      };
+    } catch (error) {
+      console.error("Could not play audio", error);
+      setPlayingAudioId(null);
+    }
+  };
+  
+  const handleLike = (messageId: string) => {
+    console.log(`Liked message: ${messageId}`);
+    // Placeholder for feedback logic
+  };
+
+  const handleDislike = (messageId: string) => {
+    console.log(`Disliked message: ${messageId}`);
+    // Placeholder for feedback logic
+  };
+
 
   const handleChatSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input || isLoading) return;
     if (isListening) {
-        recognitionRef.current.stop();
-        setIsListening(false);
+      recognitionRef.current.stop();
+      setIsListening(false);
     }
 
-    const newUserMessage: Message = { role: 'user', content: input };
+    const newUserMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: input,
+    };
     const newMessages = [...messages, newUserMessage];
     setMessages(newMessages);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
     try {
-      const chatInput: ConversationalChatInput = {
+      const chatHistory = messages.map((m) => ({
+        role: m.role,
+        content: [{ text: m.content }],
+      }));
+
+      const result = await conversationalChat({
         persona: 'a witty and slightly impatient AI assistant named Ko',
-        history: messages.map((m) => ({
-          role: m.role,
-          content: [{ text: m.content }],
-        })),
-        message: input,
+        history: chatHistory,
+        message: currentInput,
+      });
+
+      const newAiMessage: Message = {
+        id: `model-${Date.now()}`,
+        role: 'model',
+        content: result.reply,
       };
 
-      const result = await conversationalChat(chatInput);
-      setMessages([...newMessages, { role: 'model', content: result.reply }]);
-
-      // Generate and play speech
-      const speechResult = await generateSpeech({ text: result.reply });
-      playAudio(speechResult.audioDataUri);
-
+      setMessages((prev) => [...prev, newAiMessage]);
     } catch (error) {
       console.error('Error during chat:', error);
-      const errorMessage = "Sorry, I'm having trouble connecting right now.";
-      setMessages([...newMessages, { role: 'model', content: errorMessage }]);
+      const errorMessage: Message = {
+        id: `error-${Date.now()}`,
+        role: 'model',
+        content: "Sorry, I'm having trouble connecting right now.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -149,11 +207,11 @@ export default function AiTutorsPage() {
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between p-6 pt-0">
         <div className="flex-grow space-y-4 overflow-y-auto pr-4">
-          {messages.map((message, index) => (
+          {messages.map((message) => (
             <div
-              key={index}
+              key={message.id}
               className={cn(
-                'flex items-start gap-3',
+                'flex items-end gap-3 group',
                 message.role === 'user' ? 'justify-end' : 'justify-start'
               )}
             >
@@ -174,6 +232,19 @@ export default function AiTutorsPage() {
               >
                 {message.content}
               </div>
+               {message.role === 'model' && (
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleReadAloud(message)}>
+                      <Volume2 className={cn("h-4 w-4", playingAudioId === message.id && "text-primary animate-pulse")} />
+                   </Button>
+                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleLike(message.id)}>
+                      <ThumbsUp className="h-4 w-4" />
+                   </Button>
+                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDislike(message.id)}>
+                      <ThumbsDown className="h-4 w-4" />
+                   </Button>
+                </div>
+              )}
             </div>
           ))}
           {isLoading && (
@@ -205,8 +276,19 @@ export default function AiTutorsPage() {
               disabled={isLoading}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-              <Button type="button" size="icon" variant="ghost" onClick={handleMicClick} disabled={isLoading}>
-                <Mic className={cn("h-5 w-5", isListening ? "text-red-500 animate-pulse" : "")} />
+              <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={handleMicClick}
+                disabled={isLoading}
+              >
+                <Mic
+                  className={cn(
+                    'h-5 w-5',
+                    isListening ? 'text-red-500 animate-pulse' : ''
+                  )}
+                />
               </Button>
               <Button type="submit" size="icon" disabled={isLoading || !input}>
                 <Send className="h-5 w-5" />
