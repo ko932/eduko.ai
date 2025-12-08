@@ -9,6 +9,14 @@ import { Bot, Send, User, Loader2 } from 'lucide-react';
 import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
 import { useToast } from '@/hooks/use-toast';
 
+const XiIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-7 w-7 text-primary">
+      <path d="m18.5 4-5 5-5-5"/>
+      <path d="m18.5 20-5-5-5 5"/>
+      <path d="M12 3v18"/>
+    </svg>
+  );
+
 interface Message {
   id: string;
   text: string;
@@ -84,7 +92,10 @@ export default function KoChatPage() {
   
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
-        <h1 className="text-2xl font-bold font-headline mb-4">Ko AI Chat</h1>
+        <div className="flex items-center gap-2 mb-4">
+            <XiIcon />
+            <h1 className="text-2xl font-bold font-headline">Ko AI Chat</h1>
+        </div>
       <div ref={scrollAreaRef} className="flex-1 overflow-y-auto pr-4 space-y-6">
         {messages.map((message) => (
           <div
