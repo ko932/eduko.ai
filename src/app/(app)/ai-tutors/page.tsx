@@ -1,11 +1,12 @@
 'use client';
 import { useState, useRef, useEffect, FormEvent } from 'react';
+import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse, Loader2, Play, Pause, Volume2 } from 'lucide-react';
+import { Bot, Send, User, Sigma, Atom, FlaskConical, Code, HeartPulse, Loader2, Play, Pause, Volume2, Video } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import PageHeader from '@/components/page-header';
@@ -151,8 +152,15 @@ export default function AiTutorsPage() {
 
   return (
       <>
-        <PageHeader title="AI Tutors" description="Engage with specialized AI tutors for expert-level explanations." />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-12rem)]">
+        <PageHeader title="AI Tutors" description="Engage with specialized AI tutors for expert-level explanations.">
+            <Button asChild>
+                <Link href="/ko-live">
+                    <Video className="mr-2 h-4 w-4" />
+                    Go Live
+                </Link>
+            </Button>
+        </PageHeader>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-14rem)]">
             <div className="lg:col-span-1 flex flex-col gap-8">
                 <Card>
                     <CardContent className="p-6">

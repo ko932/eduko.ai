@@ -27,6 +27,7 @@ import {
   Headphones,
   User,
   BookOpen,
+  Video,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -63,12 +64,12 @@ const AppSidebar = () => {
              <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
-                isActive={isActive('/ko-chat')}
-                tooltip="Ko AI"
+                isActive={isActive('/ko-live')}
+                tooltip="Ko AI Live"
               >
-                <Link href="/ko-chat">
-                  <Bot />
-                  <span>Ko AI</span>
+                <Link href="/ko-live">
+                  <Video />
+                  <span>Ko Live</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -79,7 +80,7 @@ const AppSidebar = () => {
                 tooltip="AI Tutors"
               >
                 <Link href="/ai-tutors">
-                  <Atom />
+                  <Bot />
                   <span>AI Tutors</span>
                 </Link>
               </SidebarMenuButton>

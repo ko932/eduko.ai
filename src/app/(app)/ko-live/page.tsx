@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronsRight, BookOpen, HelpCircle, FileText, X } from 'lucide-react';
+import { ChevronsLeft, BookOpen, HelpCircle, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -25,12 +25,12 @@ const modes = {
 
 type Mode = keyof typeof modes;
 
-const Particle = ({ characteristics, vw, vh }: { characteristics: any, vw: number, vh: number }) => {
-  const { x, y, initialX, initialY, radius } = characteristics;
+const Particle = ({ characteristics }: { characteristics: any }) => {
+  const { initialX, initialY, radius } = characteristics;
   return (
     <motion.circle
-      cx={x}
-      cy={y}
+      cx={initialX}
+      cy={initialY}
       r={radius}
       fill="rgba(38, 163, 255, 0.3)"
       animate={{
@@ -49,8 +49,8 @@ const Particle = ({ characteristics, vw, vh }: { characteristics: any, vw: numbe
 
 
 const ParticleAnimation = () => {
-    const vw = 1000;
-    const vh = 1000;
+    const vw = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 1000;
     const numParticles = 80;
 
     const particles = useMemo(() => {
@@ -58,8 +58,6 @@ const ParticleAnimation = () => {
         const initialX = Math.random() * vw;
         const initialY = Math.random() * vh;
         return {
-            x: initialX,
-            y: initialY,
             initialX,
             initialY,
             radius: Math.random() * 1.5 + 0.5,
@@ -74,81 +72,29 @@ const ParticleAnimation = () => {
         preserveAspectRatio="xMidYMid slice"
         >
         {particles.map((characteristics, i) => (
-            <Particle key={i} characteristics={characteristics} vw={vw} vh={vh} />
+            <Particle key={i} characteristics={characteristics} />
         ))}
         </svg>
     );
 };
 
 
-export default function KoLiveModePage() {
+export default function KoLivePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeMode, setActiveMode] = useState<Mode>('learning');
-
-  const ModeIcon = modes[activeMode].icon;
 
   return (
     <div className="relative flex items-center justify-center w-full h-[calc(100vh-8rem)] bg-gradient-to-b from-[#071133] to-[#08183a] rounded-xl overflow-hidden">
       <ParticleAnimation />
 
-      {/* Main Canvas Content */}
-      <div className="relative z-10 text-center flex flex-col items-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-4xl md:text-5xl font-headline font-bold text-white tracking-tight"
-        >
-          <motion.span
-            animate={{
-              opacity: [0.7, 1, 0.7],
-              textShadow: [
-                '0 0 8px rgba(38, 163, 255, 0.4)',
-                '0 0 16px rgba(38, 163, 255, 0.6)',
-                '0 0 8px rgba(38, 163, 255, 0.4)',
-              ],
-            }}
-            transition={{
-              duration: 2.5,
-              repeat: Infinity,
-              repeatType: 'mirror',
-            }}
-          >
-            Welcome to the future of class
-          </motion.span>
-          <br />
-          <span className="text-2xl md:text-3xl">— Ko AI’s class —</span>
-        </motion.h1>
-
-        <motion.div
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         transition={{ duration: 0.8, delay: 0.6 }}
-         className="mt-12 w-[60%] h-72 border-2 border-dashed border-blue-400/30 rounded-2xl flex items-center justify-center bg-black/10 backdrop-blur-sm"
-        >
-          <p className="text-blue-200/70">[ 3D AI Tutor Renders Here ]</p>
-        </motion.div>
-
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="mt-6 w-[80%] max-w-2xl p-4 rounded-lg bg-white/5 backdrop-blur-md border border-white/10"
-        >
-            <p className="text-sm text-blue-100/80">
-                This is the Explanation Panel. AI-generated text, diagrams, and step-by-step guidance will appear here in real-time.
-            </p>
-        </motion.div>
-      </div>
-
       {/* Sidebar Trigger */}
       <AnimatePresence>
         {!isSidebarOpen && (
           <motion.div
-            initial={{ opacity: 0, right: -20 }}
-            animate={{ opacity: 1, right: 16 }}
-            exit={{ opacity: 0, right: -20 }}
-            className="absolute top-4 right-4 z-30"
+            initial={{ opacity: 0, left: -20 }}
+            animate={{ opacity: 1, left: 16 }}
+            exit={{ opacity: 0, left: -20 }}
+            className="absolute top-4 left-4 z-30"
           >
             <Button
               variant="ghost"
@@ -156,21 +102,21 @@ export default function KoLiveModePage() {
               onClick={() => setIsSidebarOpen(true)}
               className="text-white hover:bg-white/10 hover:text-white"
             >
-              <ChevronsRight />
+              <ChevronsLeft className="rotate-180" />
             </Button>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Right Sidebar */}
+      
+      {/* Left Sidebar */}
       <AnimatePresence>
         {isSidebarOpen && (
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: '-100%' }}
             animate={{ x: '0%' }}
-            exit={{ x: '100%' }}
+            exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="absolute top-0 right-0 h-full w-80 z-20 p-4"
+            className="absolute top-0 left-0 h-full w-80 z-20 p-4"
           >
             <div className="h-full w-full bg-black/10 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col">
               <div className="flex justify-between items-center mb-6">
@@ -226,7 +172,7 @@ export default function KoLiveModePage() {
 
                <div className="mt-auto">
                     <div className="w-full h-24 bg-white/5 rounded-lg flex items-center justify-center">
-                        <p className="text-white/40 text-sm">Chat Input Area</p>
+                        <p className="text-white/40 text-sm">[ STT/TTS Controls Here ]</p>
                     </div>
                 </div>
 
@@ -234,6 +180,65 @@ export default function KoLiveModePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Main Canvas Content */}
+      <motion.div 
+        className="relative z-10 text-center flex flex-col items-center w-full h-full"
+        animate={{
+            paddingLeft: isSidebarOpen ? '21rem' : '1rem',
+            transition: { type: 'spring', stiffness: 300, damping: 30 }
+        }}
+       >
+         <div className="w-full h-full flex flex-col items-center justify-center">
+            <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl md:text-5xl font-headline font-bold text-white tracking-tight"
+            >
+            <motion.span
+                animate={{
+                opacity: [0.7, 1, 0.7],
+                textShadow: [
+                    '0 0 8px rgba(38, 163, 255, 0.4)',
+                    '0 0 16px rgba(38, 163, 255, 0.6)',
+                    '0 0 8px rgba(38, 163, 255, 0.4)',
+                ],
+                }}
+                transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                repeatType: 'mirror',
+                }}
+            >
+                Welcome to the future of class
+            </motion.span>
+            <br />
+            <span className="text-2xl md:text-3xl">— Ko AI’s class —</span>
+            </motion.h1>
+
+            <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-12 w-[60%] h-72 border-2 border-dashed border-blue-400/30 rounded-2xl flex items-center justify-center bg-black/10 backdrop-blur-sm"
+            >
+            <p className="text-blue-200/70">[ 3D AI Tutor: Ko AI Renders Here ]</p>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="mt-6 w-[80%] max-w-2xl p-4 rounded-lg bg-white/5 backdrop-blur-md border border-white/10"
+            >
+                <p className="text-sm text-blue-100/80">
+                    This is the Explanation Panel. AI-generated text, diagrams, and step-by-step guidance will appear here in real-time.
+                </p>
+            </motion.div>
+        </div>
+      </motion.div>
+
     </div>
   );
 }
