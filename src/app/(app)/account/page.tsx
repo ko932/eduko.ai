@@ -139,14 +139,14 @@ export default function DashboardPage() {
         </Carousel>
       </div>
 
-      <div className="max-w-md mx-auto">
-        <h2 className="text-lg font-headline font-bold mb-3 text-center">Your Arsenal</h2>
-        <div className="grid grid-cols-4 gap-3">
+      <div className="max-w-xl mx-auto">
+        <h2 className="text-xl font-headline font-bold mb-4 text-center">Your Arsenal</h2>
+        <div className="grid grid-cols-4 md:grid-cols-4 gap-4">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
-              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-1">
-                <item.icon className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                <p className="mt-1 text-[10px] font-medium text-muted-foreground group-hover:text-primary transition-colors leading-tight">
+              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2">
+                <item.icon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                <p className="mt-2 text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors leading-tight">
                   {item.label}
                 </p>
               </Card>
