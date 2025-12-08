@@ -31,7 +31,7 @@ const slides = [
     { title: 'Program Evaluator', text: 'AI analyzes your academic profile.', imageId: 'program-evaluator', link: '/program-evaluator' },
     { title: 'Smart Notes', text: 'Generate top-level AI notes instantly.', imageId: 'smart-notes', link: '/smart-notes' },
     { title: 'Career Compass', text: 'Explore 50+ career paths.', imageId: 'career-compass', link: '/career-compass' },
-    { title: 'Explore Streams', text: 'Find perfect academic streams.', imageId: 'explore-streams', link: '/streams' },
+    { title: 'Explore Streams', text: 'Find perfect academic streams.', imageId: 'explore-streams', link: '/explore-streams' },
     { title: 'Form Central', text: 'Apply for any form in one place.', imageId: 'form-central', link: '/forms' },
     { title: 'Flashcards', text: 'Create and study digital flashcards.', imageId: 'flashcards', link: '/flashcards' },
     { title: 'Quiz Maker', text: 'Generate quizzes on any topic.', imageId: 'quiz-maker', link: '/quiz-maker' },
@@ -109,7 +109,7 @@ export default function DashboardPage() {
                 return (
                 <CarouselItem key={index}>
                     <Link href={slide.link}>
-                      <div className="relative aspect-[40/9] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-2 bg-secondary">
+                      <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-2 bg-secondary">
                         {image && (
                         <Image
                             src={image.imageUrl}
