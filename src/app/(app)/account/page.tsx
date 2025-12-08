@@ -92,51 +92,55 @@ export default function DashboardPage() {
   return (
     <>
       <div className="mb-12">
-         <div className="flex flex-col justify-center bg-card/50 rounded-lg p-8 mb-8">
-             <h1 className="text-3xl font-headline font-bold mb-2">Welcome back, Warrior</h1>
-             <p className="text-muted-foreground mb-6">This is your command center. Stay focused, stay sharp.</p>
-             {quote.text && (
-                 <blockquote className="border-l-2 border-primary pl-4 italic">
-                     <p>"{quote.text}"</p>
-                     <cite className="text-sm text-muted-foreground not-italic block mt-2">- {quote.author}</cite>
-                 </blockquote>
-             )}
+        <div className="max-w-xl mx-auto mb-8">
+            <div className="flex flex-col justify-center bg-card/50 rounded-lg p-8">
+                <h1 className="text-3xl font-headline font-bold mb-2">Welcome back, Warrior</h1>
+                <p className="text-muted-foreground mb-6">This is your command center. Stay focused, stay sharp.</p>
+                {quote.text && (
+                    <blockquote className="border-l-2 border-primary pl-4 italic">
+                        <p>"{quote.text}"</p>
+                        <cite className="text-sm text-muted-foreground not-italic block mt-2">- {quote.author}</cite>
+                    </blockquote>
+                )}
+            </div>
         </div>
-        <Carousel className="w-full" opts={{ loop: true }}>
-            <CarouselContent>
-            {slides.map((slide, index) => {
-                const image = getImage(slide.imageId);
-                return (
-                <CarouselItem key={index}>
-                    <Link href={slide.link}>
-                      <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-1 bg-secondary">
-                        {image && (
-                        <Image
-                            src={image.imageUrl}
-                            alt={image.description}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            className="opacity-20"
-                            data-ai-hint={image.imageHint}
-                        />
-                        )}
-                        <div className="relative z-10">
-                        <h1 className="text-base md:text-lg font-bold font-headline tracking-tight">
-                            {slide.title}
-                        </h1>
-                        <p className="mt-1 max-w-2xl text-xs">
-                            {slide.text}
-                        </p>
+        <div className="max-w-xl mx-auto">
+            <Carousel className="w-full" opts={{ loop: true }}>
+                <CarouselContent>
+                {slides.map((slide, index) => {
+                    const image = getImage(slide.imageId);
+                    return (
+                    <CarouselItem key={index}>
+                        <Link href={slide.link}>
+                        <div className="relative aspect-[40/7] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-1 bg-secondary">
+                            {image && (
+                            <Image
+                                src={image.imageUrl}
+                                alt={image.description}
+                                fill
+                                style={{ objectFit: 'cover' }}
+                                className="opacity-20"
+                                data-ai-hint={image.imageHint}
+                            />
+                            )}
+                            <div className="relative z-10">
+                            <h1 className="text-base md:text-lg font-bold font-headline tracking-tight">
+                                {slide.title}
+                            </h1>
+                            <p className="mt-1 max-w-2xl text-xs">
+                                {slide.text}
+                            </p>
+                            </div>
                         </div>
-                    </div>
-                    </Link>
-                </CarouselItem>
-                );
-            })}
-            </CarouselContent>
-            <CarouselPrevious className="left-4" />
-            <CarouselNext className="right-4" />
-        </Carousel>
+                        </Link>
+                    </CarouselItem>
+                    );
+                })}
+                </CarouselContent>
+                <CarouselPrevious className="left-4" />
+                <CarouselNext className="right-4" />
+            </Carousel>
+        </div>
       </div>
 
       <div className="max-w-xl mx-auto">
@@ -145,7 +149,7 @@ export default function DashboardPage() {
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
               <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2">
-                <item.icon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                <item.icon className="h-8 w-8 text-muted-foreground group-hover:text-primary transition-colors" />
                 <p className="mt-2 text-xs font-medium text-muted-foreground group-hover:text-primary transition-colors leading-tight">
                   {item.label}
                 </p>
