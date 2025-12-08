@@ -140,13 +140,13 @@ export default function DashboardPage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-headline font-bold mb-6">Your Arsenal</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+        <h2 className="text-xl font-headline font-bold mb-4">Your Arsenal</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {arsenalItems.map((item) => (
             <Link href={item.href} key={item.label} className="group">
-              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-4">
-                <item.icon className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                <p className="mt-2 text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
+              <Card className="bg-card/50 hover:bg-secondary/50 hover:border-primary/50 transition-colors text-center aspect-square flex flex-col items-center justify-center p-2 sm:p-4">
+                <item.icon className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <p className="mt-2 text-xs sm:text-sm font-medium text-muted-foreground group-hover:text-primary transition-colors">
                   {item.label}
                 </p>
               </Card>
