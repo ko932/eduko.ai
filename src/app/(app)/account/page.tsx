@@ -128,7 +128,7 @@ export default function DashboardPage() {
                 return (
                 <CarouselItem key={index}>
                     <Link href={slide.link}>
-                      <div className="relative aspect-[3/1] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-8 bg-secondary">
+                      <div className="relative aspect-[4/1] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-8 bg-secondary">
                         {image && (
                         <Image
                             src={image.imageUrl}
