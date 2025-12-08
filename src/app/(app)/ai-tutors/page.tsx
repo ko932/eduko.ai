@@ -153,7 +153,7 @@ export default function AiTutorsPage() {
   return (
       <>
         <PageHeader title="AI Tutors" description="Engage with specialized AI tutors for expert-level explanations.">
-            <Button asChild>
+            <Button asChild className="shadow-[0_0_20px] shadow-primary/50">
                 <Link href="/ko-live">
                     <Video className="mr-2 h-4 w-4" />
                     Go Live
