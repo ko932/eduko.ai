@@ -2,40 +2,33 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
-    // Avatars and environments — read by authenticated users; upload by admins
     match /avatars/{allPaths=**} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
     }
+
     match /environments/{allPaths=**} {
       allow read: if request.auth != null;
       allow write: if isAdmin();
     }
 
-    // Session recordings: only session participants or admins can read
+    // Session recordings should be accessed via signed URLs from server.
     match /session-recordings/{sessionId}/{fileName} {
-      allow write: if request.auth != null && (isSessionParticipant(sessionId) || isServer());
-      allow read: if request.auth != null && (isSessionParticipant(sessionId) || isAdmin());
-      allow delete: if isAdmin();
+      // clients should NOT access directly; enforce server-side signed URLs in production.
+      allow read, write: if false;
     }
 
-    // Thumbnails and misc public assets
     match /public/{allPaths=**} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // helper function
     function isAdmin() {
       return request.auth != null && request.auth.token != null && request.auth.token.admin == true;
     }
+
     function isServer() {
       return request.auth != null && request.auth.token.server == true;
-    }
-    function isSessionParticipant(sessionId) {
-      // session membership check via Firestore isn't available in storage rules.
-      // Recommend to store a short access token in the session doc and require it on upload/read via metadata.
-      return false;
     }
   }
 }
