@@ -110,45 +110,8 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        <div className="lg:col-span-2">
-            <Carousel className="w-full" opts={{ loop: true }}>
-                <CarouselContent>
-                {slides.map((slide, index) => {
-                    const image = getImage(slide.imageId);
-                    return (
-                    <CarouselItem key={index}>
-                        <Link href={slide.link}>
-                          <div className="relative aspect-[2/1] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-8 bg-secondary">
-                            {image && (
-                            <Image
-                                src={image.imageUrl}
-                                alt={image.description}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                className="opacity-20"
-                                data-ai-hint={image.imageHint}
-                            />
-                            )}
-                            <div className="relative z-10">
-                            <h1 className="text-3xl md:text-4xl font-bold font-headline tracking-tight">
-                                {slide.title}
-                            </h1>
-                            <p className="mt-2 max-w-2xl text-lg">
-                                {slide.text}
-                            </p>
-                            </div>
-                        </div>
-                        </Link>
-                    </CarouselItem>
-                    );
-                })}
-                </CarouselContent>
-                <CarouselPrevious className="left-4" />
-                <CarouselNext className="right-4" />
-            </Carousel>
-        </div>
-        <div className="flex flex-col justify-center bg-card/50 rounded-lg p-8">
+      <div className="mb-12">
+         <div className="flex flex-col justify-center bg-card/50 rounded-lg p-8 mb-8">
              <h1 className="text-3xl font-headline font-bold mb-2">Welcome back, Warrior</h1>
              <p className="text-muted-foreground mb-6">This is your command center. Stay focused, stay sharp.</p>
              {quote.text && (
@@ -158,6 +121,41 @@ export default function DashboardPage() {
                  </blockquote>
              )}
         </div>
+        <Carousel className="w-full" opts={{ loop: true }}>
+            <CarouselContent>
+            {slides.map((slide, index) => {
+                const image = getImage(slide.imageId);
+                return (
+                <CarouselItem key={index}>
+                    <Link href={slide.link}>
+                      <div className="relative aspect-[2/1] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-8 bg-secondary">
+                        {image && (
+                        <Image
+                            src={image.imageUrl}
+                            alt={image.description}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            className="opacity-20"
+                            data-ai-hint={image.imageHint}
+                        />
+                        )}
+                        <div className="relative z-10">
+                        <h1 className="text-3xl md:text-4xl font-bold font-headline tracking-tight">
+                            {slide.title}
+                        </h1>
+                        <p className="mt-2 max-w-2xl text-lg">
+                            {slide.text}
+                        </p>
+                        </div>
+                    </div>
+                    </Link>
+                </CarouselItem>
+                );
+            })}
+            </CarouselContent>
+            <CarouselPrevious className="left-4" />
+            <CarouselNext className="right-4" />
+        </Carousel>
       </div>
 
       <div>
