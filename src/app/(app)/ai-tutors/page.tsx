@@ -1,14 +1,19 @@
 'use client';
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, useRef } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { BrainCircuit, Mic, Send } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { conversationalChat } from '@/ai/flows/conversational-chat';
-import type { ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import { conversationalChat, type ConversationalChatInput } from '@/ai/flows/conversational-chat';
+import { generateSpeech } from '@/ai/flows/generate-speech';
+
+// Check for SpeechRecognition API
+const SpeechRecognition =
+  (typeof window !== 'undefined' && (window.SpeechRecognition || window.webkitSpeechRecognition));
+
 
 const welcomeMessages = [
   'Hello, Warrior. I’m Ko, your personal AI mentor.\nAsk me anything — I’m here to guide you, train you, and help you grow.',
@@ -28,9 +33,10 @@ export default function AiTutorsPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
-    // Cycle through messages daily
     const dayOfYear = Math.floor(
       (Date.now() - new Date(new Date().getFullYear(), 0, 0).valueOf()) /
         (1000 * 60 * 60 * 24)
@@ -41,11 +47,53 @@ export default function AiTutorsPage() {
         content: welcomeMessages[dayOfYear % welcomeMessages.length],
       },
     ]);
+
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join('');
+        setInput(transcript);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
   }, []);
-  
+
+  const handleMicClick = () => {
+    if (!SpeechRecognition) {
+        alert("Your browser doesn't support speech recognition.");
+        return;
+    }
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      setInput('');
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+
+  const playAudio = (audioDataUri: string) => {
+    const audio = new Audio(audioDataUri);
+    audio.play();
+  };
+
   const handleChatSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!input || isLoading) return;
+    if (isListening) {
+        recognitionRef.current.stop();
+        setIsListening(false);
+    }
 
     const newUserMessage: Message = { role: 'user', content: input };
     const newMessages = [...messages, newUserMessage];
@@ -54,22 +102,28 @@ export default function AiTutorsPage() {
     setIsLoading(true);
 
     try {
-        const chatInput: ConversationalChatInput = {
-            persona: 'a witty and slightly impatient AI assistant named Ko',
-            history: messages.map(m => ({
-                role: m.role,
-                content: [{ text: m.content }]
-            })),
-            message: input
-        };
+      const chatInput: ConversationalChatInput = {
+        persona: 'a witty and slightly impatient AI assistant named Ko',
+        history: messages.map((m) => ({
+          role: m.role,
+          content: [{ text: m.content }],
+        })),
+        message: input,
+      };
 
       const result = await conversationalChat(chatInput);
       setMessages([...newMessages, { role: 'model', content: result.reply }]);
+
+      // Generate and play speech
+      const speechResult = await generateSpeech({ text: result.reply });
+      playAudio(speechResult.audioDataUri);
+
     } catch (error) {
-      console.error("Error calling conversational chat:", error);
-      setMessages([...newMessages, { role: 'model', content: "Sorry, I'm having trouble connecting right now." }]);
+      console.error('Error during chat:', error);
+      const errorMessage = "Sorry, I'm having trouble connecting right now.";
+      setMessages([...newMessages, { role: 'model', content: errorMessage }]);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -95,7 +149,7 @@ export default function AiTutorsPage() {
       </CardHeader>
       <CardContent className="flex-grow flex flex-col justify-between p-6 pt-0">
         <div className="flex-grow space-y-4 overflow-y-auto pr-4">
-           {messages.map((message, index) => (
+          {messages.map((message, index) => (
             <div
               key={index}
               className={cn(
@@ -104,10 +158,10 @@ export default function AiTutorsPage() {
               )}
             >
               {message.role === 'model' && (
-                 <Avatar className="w-8 h-8 border-2 border-primary/50">
-                    <AvatarFallback className="bg-primary/20">
-                        <BrainCircuit className="w-5 h-5 text-primary" />
-                    </AvatarFallback>
+                <Avatar className="w-8 h-8 border-2 border-primary/50">
+                  <AvatarFallback className="bg-primary/20">
+                    <BrainCircuit className="w-5 h-5 text-primary" />
+                  </AvatarFallback>
                 </Avatar>
               )}
               <div
@@ -122,16 +176,16 @@ export default function AiTutorsPage() {
               </div>
             </div>
           ))}
-           {isLoading && (
-             <div className="flex items-start gap-3 justify-start">
-                <Avatar className="w-8 h-8 border-2 border-primary/50">
-                    <AvatarFallback className="bg-primary/20">
-                        <BrainCircuit className="w-5 h-5 text-primary animate-pulse" />
-                    </AvatarFallback>
-                </Avatar>
-                 <div className="bg-secondary rounded-lg px-4 py-3">
-                    <span className="animate-pulse">...</span>
-                 </div>
+          {isLoading && (
+            <div className="flex items-start gap-3 justify-start">
+              <Avatar className="w-8 h-8 border-2 border-primary/50">
+                <AvatarFallback className="bg-primary/20">
+                  <BrainCircuit className="w-5 h-5 text-primary animate-pulse" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="bg-secondary rounded-lg px-4 py-3">
+                <span className="animate-pulse">...</span>
+              </div>
             </div>
           )}
         </div>
@@ -151,8 +205,8 @@ export default function AiTutorsPage() {
               disabled={isLoading}
             />
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-              <Button type="button" size="icon" variant="ghost" disabled={isLoading}>
-                <Mic className="h-5 w-5" />
+              <Button type="button" size="icon" variant="ghost" onClick={handleMicClick} disabled={isLoading}>
+                <Mic className={cn("h-5 w-5", isListening ? "text-red-500 animate-pulse" : "")} />
               </Button>
               <Button type="submit" size="icon" disabled={isLoading || !input}>
                 <Send className="h-5 w-5" />
