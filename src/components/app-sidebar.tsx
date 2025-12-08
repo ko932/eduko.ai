@@ -61,27 +61,15 @@ const AppSidebar = () => {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive('/ko-live')}
-                tooltip="Ko AI Live"
-              >
-                <Link href="/ko-live">
-                  <Video />
-                  <span>Ko Live</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 asChild
                 isActive={isActive('/ai-tutors')}
-                tooltip="AI Tutors"
+                tooltip="Ko AI"
               >
                 <Link href="/ai-tutors">
-                  <Bot />
-                  <span>AI Tutors</span>
+                  <BrainCircuit />
+                  <span>Ko AI</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
