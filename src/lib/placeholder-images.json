@@ -19,40 +19,106 @@
       "imageHint": "student exam"
     },
     {
-      "id": "smart-doubt-solver",
-      "description": "Banner for Smart Doubt Solver",
-      "imageUrl": "https://images.unsplash.com/photo-1743767587861-2a932969286e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmdXR1cmlzdGljJTIwZWR1Y2F0aW9ufGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "futuristic education"
+      "id": "tools-arsenal",
+      "description": "Banner for Tools Arsenal",
+      "imageUrl": "https://images.unsplash.com/photo-1624823183493-ed5832f48f18?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkaWdpdGFsJTIwdG9vbHN8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital tools"
     },
     {
-      "id": "ai-lecture-notes",
-      "description": "Banner for AI Lecture Notes",
-      "imageUrl": "https://images.unsplash.com/photo-1655891709727-1506dff4af97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxBSSUyMGxlYXJuaW5nfGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "AI learning"
+      "id": "program-evaluator",
+      "description": "Banner for Program Evaluator",
+      "imageUrl": "https://images.unsplash.com/photo-1653379670765-26034c7c71c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhY2FkZW1pYyUyMHByb2ZpbGV8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "academic profile"
     },
     {
-      "id": "revision-planner",
-      "description": "Banner for Revision Planner",
-      "imageUrl": "https://images.unsplash.com/photo-1606242403120-0d1997a32486?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxkaWdpdGFsJTIwcGxhbm5lcnxlbnwwfHx8fDE3NjUxODAzOTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "digital planner"
+      "id": "smart-notes",
+      "description": "Banner for Smart Notes",
+      "imageUrl": "https://images.unsplash.com/photo-1761311984450-a72d5f551407?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxBSSUyMG5vdGVzfGVufDB8fHx8MTc2NTE4MjMzMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "AI notes"
     },
     {
-      "id": "mock-tests-analytics",
-      "description": "Banner for Mock Tests & Analytics",
-      "imageUrl": "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxkYXRhJTIwYW5hbHl0aWNzfGVufDB8fHx8MTc2NTE4MDM5MXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "data analytics"
+      "id": "career-compass",
+      "description": "Banner for Career Compass",
+      "imageUrl": "https://picsum.photos/seed/13/600/200",
+      "imageHint": "career paths"
     },
     {
-      "id": "eduko-ai-chat",
-      "description": "Banner for Eduko AI Chat",
-      "imageUrl": "https://images.unsplash.com/photo-1684369175809-f9642140a1bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxBSSUyMGNoYXRib3R8ZW58MHx8fHwxNzY1MTczOTMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "AI chatbot"
+      "id": "explore-streams",
+      "description": "Banner for Explore Streams",
+      "imageUrl": "https://images.unsplash.com/photo-1758522488640-59b1b0acf03f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxhY2FkZW1pYyUyMHN0cmVhbXN8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "academic streams"
     },
     {
-      "id": "career-guidance",
-      "description": "Banner for Career Guidance",
-      "imageUrl": "https://images.unsplash.com/photo-1516618317270-b99d1715c58d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYXJlZXIlMjBwYXRofGVufDB8fHx8MTc2NTE3NzkzNHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "career path"
+      "id": "form-central",
+      "description": "Banner for Form Central",
+      "imageUrl": "https://images.unsplash.com/photo-1628489823345-3243ad97028c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxhcHBsaWNhdGlvbiUyMGZvcm1zfGVufDB8fHx8MTc2NTE4MjMzMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "application forms"
+    },
+    {
+      "id": "flashcards",
+      "description": "Banner for Flashcards",
+      "imageUrl": "https://images.unsplash.com/photo-1598263689741-83c153610472?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8ZGlnaXRhbCUyMGZsYXNoY2FyZHN8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "digital flashcards"
+    },
+    {
+      "id": "quiz-maker",
+      "description": "Banner for Quiz Maker",
+      "imageUrl": "https://images.unsplash.com/photo-1509228627152-72ae9ae6848d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnZW5lcmF0ZSUyMHF1aXp6ZXN8ZW58MHx8fHwxNzY1MTgyMzMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "generate quizzes"
+    },
+    {
+      "id": "exam-countdown",
+      "description": "Banner for Exam Countdown",
+      "imageUrl": "https://images.unsplash.com/photo-1574660430686-b2a255cfce68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxleGFtJTIwdGltZXJ8ZW58MHx8fHwxNzY1MTgyMzMyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "exam timer"
+    },
+    {
+      "id": "ai-timetable-generator",
+      "description": "Banner for AI Timetable Generator",
+      "imageUrl": "https://images.unsplash.com/photo-1560785496-321917f24016?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzdHVkeSUyMHNjaGVkdWxlfGVufDB8fHx8MTc2NTA3MTYyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "study schedule"
+    },
+    {
+      "id": "study-battle-room",
+      "description": "Banner for Study Battle Room",
+      "imageUrl": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxncm91cCUyMHN0dWR5fGVufDB8fHx8MTc2NTEyNDQzMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "group study"
+    },
+    {
+      "id": "math-tutor",
+      "description": "Banner for AI Math Tutor",
+      "imageUrl": "https://images.unsplash.com/photo-1758685733737-71f8945decf1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtYXRoJTIwZXF1YXRpb25zfGVufDB8fHx8MTc2NTEzODY2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "math equations"
+    },
+    {
+      "id": "chemistry-tutor",
+      "description": "Banner for AI Chemistry Tutor",
+      "imageUrl": "https://images.unsplash.com/photo-1745237497721-5e6c13a171ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaGVtaWNhbCUyMHJlYWN0aW9uc3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chemical reactions"
+    },
+    {
+      "id": "physics-tutor",
+      "description": "Banner for AI Physics Tutor",
+      "imageUrl": "https://images.unsplash.com/photo-1758685734343-491353d96a81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwaHlzaWNzJTIwY29uY2VwdHN8ZW58MHx8fHwxNzY1MDgyODEwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "physics concepts"
+    },
+    {
+      "id": "code-mentor",
+      "description": "Banner for Code Mentor",
+      "imageUrl": "https://images.unsplash.com/photo-1692598578454-570cb62ecf2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb2RpbmclMjBBSXxlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coding AI"
+    },
+    {
+      "id": "medical-tutor",
+      "description": "Banner for Medical Tutor",
+      "imageUrl": "https://images.unsplash.com/photo-1639991987087-f28545e9b1f2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtZWRpY2FsJTIwYmlvbG9neXxlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "medical biology"
+    },
+    {
+      "id": "project-genx",
+      "description": "Banner for Project GenX",
+      "imageUrl": "https://images.unsplash.com/photo-1721244654392-9c912a6eb236?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwcm9qZWN0JTIwYmx1ZXByaW50c3xlbnwwfHx8fDE3NjUxODIzMzF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "project blueprints"
     }
   ]
 }

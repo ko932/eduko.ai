@@ -27,42 +27,23 @@ import {
 } from '@/components/ui/carousel';
 
 const slides = [
-  {
-    title: 'Smart Doubt Solver',
-    text: 'Instant answers. Zero waiting.',
-    imageId: 'smart-doubt-solver',
-    link: '/doubts',
-  },
-  {
-    title: 'AI Lecture Notes',
-    text: 'Auto notes for every chapter.',
-    imageId: 'ai-lecture-notes',
-    link: '/notes',
-  },
-  {
-    title: 'Revision Planner',
-    text: 'Your personalised plan.',
-    imageId: 'revision-planner',
-    link: '/planner',
-  },
-  {
-    title: 'Mock Tests & Analytics',
-    text: 'Know your scores instantly.',
-    imageId: 'mock-tests-analytics',
-    link: '/tests',
-  },
-  {
-    title: 'Eduko AI Chat',
-    text: 'Your personal AI partner.',
-    imageId: 'eduko-ai-chat',
-    link: '/ko-chat',
-  },
-  {
-    title: 'Career Guidance',
-    text: 'Choose your perfect path.',
-    imageId: 'career-guidance',
-    link: '/program-evaluator',
-  },
+    { title: 'Tools Arsenal', text: 'Your digital lab for academic firepower.', imageId: 'tools-arsenal', link: '/tools' },
+    { title: 'Program Evaluator', text: 'AI analyzes your academic profile.', imageId: 'program-evaluator', link: '/program-evaluator' },
+    { title: 'Smart Notes', text: 'Generate top-level AI notes instantly.', imageId: 'smart-notes', link: '/smart-notes' },
+    { title: 'Career Compass', text: 'Explore 50+ career paths.', imageId: 'career-compass', link: '/career-compass' },
+    { title: 'Explore Streams', text: 'Find perfect academic streams.', imageId: 'explore-streams', link: '/streams' },
+    { title: 'Form Central', text: 'Apply for any form in one place.', imageId: 'form-central', link: '/forms' },
+    { title: 'Flashcards', text: 'Create and study digital flashcards.', imageId: 'flashcards', link: '/flashcards' },
+    { title: 'Quiz Maker', text: 'Generate quizzes on any topic.', imageId: 'quiz-maker', link: '/quiz-maker' },
+    { title: 'Exam Countdown', text: 'Track your upcoming exams.', imageId: 'exam-countdown', link: '/exam-countdown' },
+    { title: 'AI Timetable Generator', text: 'Personalized study schedule.', imageId: 'ai-timetable-generator', link: '/timetable-ai' },
+    { title: 'Study Battle Room', text: 'Group study with AI tutor.', imageId: 'study-battle-room', link: '/battle-room' },
+    { title: 'Mr. Vasu – AI Math Tutor', text: 'Solve equations & visualize graphs.', imageId: 'math-tutor', link: '/math-tutor' },
+    { title: 'Mr. Bondz – AI Chemistry Tutor', text: 'Learn reactions & stoichiometry.', imageId: 'chemistry-tutor', link: '/chemistry-tutor' },
+    { title: 'Mr. Ohm – AI Physics Tutor', text: 'Mechanics, EM, thermodynamics help.', imageId: 'physics-tutor', link: '/physics-tutor' },
+    { title: 'Mr. Aryan – Code Mentor', text: 'Debug & build code with AI.', imageId: 'code-mentor', link: '/code-mentor' },
+    { title: 'Sanjivani AI – Medical Tutor', text: 'Medical & biology guidance.', imageId: 'medical-tutor', link: '/medical-tutor' },
+    { title: 'Project GenX', text: 'Build complete AI project blueprints.', imageId: 'project-genx', link: '/project-genx' },
 ];
 
 const quotes = [
@@ -128,7 +109,7 @@ export default function DashboardPage() {
                 return (
                 <CarouselItem key={index}>
                     <Link href={slide.link}>
-                      <div className="relative aspect-[28/9] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-6 bg-secondary">
+                      <div className="relative aspect-[28/9] rounded-lg overflow-hidden flex items-center justify-center text-center text-white p-2 bg-secondary">
                         {image && (
                         <Image
                             src={image.imageUrl}
