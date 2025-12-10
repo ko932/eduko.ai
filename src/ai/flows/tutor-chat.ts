@@ -1,4 +1,4 @@
-'use server';
+
 
 /**
  * @fileOverview The brain for the 3D AI Tutors in Live Mode.
@@ -49,48 +49,48 @@ export type TutorChatInput = z.infer<typeof TutorChatInputSchema>;
 // This tool simulates fetching data from various backend services (Vector DB, student profile DB).
 // This replaces the previous, simpler `getStudentContext` tool.
 const getFullStudentRAGContext = ai.defineTool(
-    {
-      name: 'getFullStudentRAGContext',
-      description: 'Retrieves all necessary RAG context for a given student, including academic history, vector context, and knowledge graph data, to help the tutor formulate the best response.',
-      inputSchema: z.object({
-        studentId: z.string(),
-        topic: z.string(),
-        tutor: z.string(), // To filter vector DB results
-      }),
-      outputSchema: z.object({
-        ragContext: z.string().describe("Contextual documents retrieved from a vector database based on the student's question and the current topic."),
-        lastInteractions: z.array(z.object({ q: z.string(), a: z.string() })).describe("The last 5 interactions the student had, to provide conversational context."),
-        knowledgeGraph: z.object({ weak_areas: z.array(z.string()) }).describe("A summary of the student's knowledge graph, highlighting known weak areas."),
-      }),
-    },
-    async ({ studentId, topic, tutor }) => {
-      // In a real implementation, this would make parallel calls to:
-      // 1. A Vector DB (e.g., Pinecone) to get `ragContext`, filtered by `tutor`/`subject`.
-      // 2. A student profile DB (e.g., Firestore) to get `lastInteractions` and `knowledgeGraph`.
-      
-      console.log(`RAG Retrieval for student ${studentId} on topic '${topic}' with tutor ${tutor}`);
+  {
+    name: 'getFullStudentRAGContext',
+    description: 'Retrieves all necessary RAG context for a given student, including academic history, vector context, and knowledge graph data, to help the tutor formulate the best response.',
+    inputSchema: z.object({
+      studentId: z.string(),
+      topic: z.string(),
+      tutor: z.string(), // To filter vector DB results
+    }),
+    outputSchema: z.object({
+      ragContext: z.string().describe("Contextual documents retrieved from a vector database based on the student's question and the current topic."),
+      lastInteractions: z.array(z.object({ q: z.string(), a: z.string() })).describe("The last 5 interactions the student had, to provide conversational context."),
+      knowledgeGraph: z.object({ weak_areas: z.array(z.string()) }).describe("A summary of the student's knowledge graph, highlighting known weak areas."),
+    }),
+  },
+  async ({ studentId, topic, tutor }: { studentId: string; topic: string; tutor: string }) => {
+    // In a real implementation, this would make parallel calls to:
+    // 1. A Vector DB (e.g., Pinecone) to get `ragContext`, filtered by `tutor`/`subject`.
+    // 2. A student profile DB (e.g., Firestore) to get `lastInteractions` and `knowledgeGraph`.
 
-      // Simulating the retrieval for this example.
-      return {
-        ragContext: `Integration is the reverse of differentiation. The integral of x^n is (x^(n+1))/(n+1) + C. For x^2, the integral is x^3/3 + C. The '+ C' is the constant of integration and is very important. This concept is related to finding the area under a curve.`,
-        lastInteractions: [
-            {q: "What is differentiation?", a: "It's the rate of change of a function."},
-            {q: "Thanks, that makes sense.", a: "You're welcome. Shall we try an example?"}
-        ],
-        knowledgeGraph: {
-            weak_areas: ["limits", "trigonometric identities", "constant of integration"]
-        },
-      };
-    }
+    console.log(`RAG Retrieval for student ${studentId} on topic '${topic}' with tutor ${tutor}`);
+
+    // Simulating the retrieval for this example.
+    return {
+      ragContext: `Integration is the reverse of differentiation. The integral of x^n is (x^(n+1))/(n+1) + C. For x^2, the integral is x^3/3 + C. The '+ C' is the constant of integration and is very important. This concept is related to finding the area under a curve.`,
+      lastInteractions: [
+        { q: "What is differentiation?", a: "It's the rate of change of a function." },
+        { q: "Thanks, that makes sense.", a: "You're welcome. Shall we try an example?" }
+      ],
+      knowledgeGraph: {
+        weak_areas: ["limits", "trigonometric identities", "constant of integration"]
+      },
+    };
+  }
 );
 
 
 const tutorPrompt = ai.definePrompt({
-    name: 'tutorPrompt',
-    input: { schema: TutorChatInputSchema },
-    output: { schema: TutorChatOutputSchema },
-    tools: [getFullStudentRAGContext],
-    system: `You are a 3D AI Teaching Tutor inside Eduko’s Live Mode. 
+  name: 'tutorPrompt',
+  input: { schema: TutorChatInputSchema },
+  output: { schema: TutorChatOutputSchema },
+  tools: [getFullStudentRAGContext],
+  system: `You are a 3D AI Teaching Tutor inside Eduko’s Live Mode. 
 Your role is to teach concepts with clarity, accuracy, and adaptive difficulty.
 
 You ALWAYS call the getFullStudentRAGContext tool to get the required information about the student. DO NOT invent student data.
@@ -120,17 +120,18 @@ RULES:
 5. NEVER produce content outside the schema.
 6. ALWAYS reason step-by-step in hidden chain-of-thought but output only the final JSON schema.
 `,
-    prompt: (input) => {
-        let subjectPrompt = "";
-        switch (input.tutor) {
-            case "mr_vasu": subjectPrompt = "CONTEXT: You are Mr. Vasu. You teach math (calculus, algebra, graphs). Prefer geometric intuition and step-by-step equations."; break;
-            case "mr_bondz": subjectPrompt = "CONTEXT: You are Mr. Bondz. You teach chemistry (reactions, stoichiometry). Use reaction formats: A + B -> C."; break;
-            case "mr_ohm": subjectPrompt = "CONTEXT: You are Mr. Ohm. You teach physics (mechanics, EM). Relate concepts to real-world analogies."; break;
-            case "mr_aryan": subjectPrompt = "CONTEXT: You are Mr. Aryan. You teach coding (Python, JS, DSA). Show clean code blocks and pseudocode."; break;
-            case "sanjivani": subjectPrompt = "CONTEXT: You are Sanjivani AI. You teach medical concepts (anatomy, physiology). Use clear visuals and ethical, safe explanations."; break;
-        }
+  prompt: (input: TutorChatInput) => {
+    let subjectPrompt = "";
+    switch (input.tutor) {
+      case "mr_vasu": subjectPrompt = "CONTEXT: You are Mr. Vasu. You teach math (calculus, algebra, graphs). Prefer geometric intuition and step-by-step equations."; break;
+      case "mr_bondz": subjectPrompt = "CONTEXT: You are Mr. Bondz. You teach chemistry (reactions, stoichiometry). Use reaction formats: A + B -> C."; break;
+      case "mr_ohm": subjectPrompt = "CONTEXT: You are Mr. Ohm. You teach physics (mechanics, EM). Relate concepts to real-world analogies."; break;
+      case "mr_aryan": subjectPrompt = "CONTEXT: You are Mr. Aryan. You teach coding (Python, JS, DSA). Show clean code blocks and pseudocode."; break;
+      case "sanjivani": subjectPrompt = "CONTEXT: You are Sanjivani AI. You teach medical concepts (anatomy, physiology). Use clear visuals and ethical, safe explanations."; break;
+    }
 
-        return `
+    return [{
+      text: `
 ${subjectPrompt}
 
 A student has asked a question.
@@ -140,8 +141,8 @@ A student has asked a question.
 - Current Difficulty Mode Requested: {{mode}}
 
 Please generate the JSON response.
-`;
-    },
+` }];
+  },
 });
 
 
@@ -151,22 +152,22 @@ const tutorChatFlow = ai.defineFlow(
     inputSchema: TutorChatInputSchema,
     outputSchema: TutorChatOutputSchema,
   },
-  async (input) => {
+  async (input: TutorChatInput) => {
     try {
-        console.log("Executing tutor chat flow with input:", input);
-        const { output } = await tutorPrompt(input);
-        
-        if (!output) {
-            throw new Error("The model did not return a valid output.");
-        }
-        
-        // Here you would persist the knowledge graph update.
-        // const success = detectSuccess(output);
-        // await updateKnowledgeGraph(input.studentId, { topic: input.topic, difficulty: output.difficulty, success });
-        console.log("Simulating knowledge graph update for student:", input.studentId);
-        console.log("Response generated with difficulty:", output.difficulty);
+      console.log("Executing tutor chat flow with input:", input);
+      const { output } = await tutorPrompt(input);
 
-        return output;
+      if (!output) {
+        throw new Error("The model did not return a valid output.");
+      }
+
+      // Here you would persist the knowledge graph update.
+      // const success = detectSuccess(output);
+      // await updateKnowledgeGraph(input.studentId, { topic: input.topic, difficulty: output.difficulty, success });
+      console.log("Simulating knowledge graph update for student:", input.studentId);
+      console.log("Response generated with difficulty:", output.difficulty);
+
+      return output;
 
     } catch (e: any) {
       console.error("Error in tutorChatFlow:", e);
@@ -175,13 +176,13 @@ const tutorChatFlow = ai.defineFlow(
         explanation: "I had a moment of computational difficulty. Let's try to simplify that. What part is most confusing?",
         steps: [],
         quiz: {
-            question: "",
-            options: [],
-            answer: "",
-            explain_answer: "",
+          question: "",
+          options: [],
+          answer: "",
+          explain_answer: "",
         },
         actions: [
-            { type: "animate", name: "think_pose" }
+          { type: "animate" as const, name: "think_pose" }
         ],
         difficulty: input.mode,
       };

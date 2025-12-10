@@ -16,7 +16,7 @@ const ConversationalChatInputSchema = z.object({
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     content: z.array(z.object({
-        text: z.string()
+      text: z.string()
     }))
   })).describe('The conversation history.'),
   message: z.string().describe('The latest user message.'),
@@ -34,12 +34,10 @@ export async function conversationalChat(input: ConversationalChatInput): Promis
 
   const { text } = await ai.generate({
     prompt: message,
-    history: history,
-    config: {
-        // Use a tool for this later
-        systemInstruction: `You are an AI assistant. You must adopt the following persona: ${persona}. Your responses should be concise, witty, and directly answer the user's question. Do not be overly verbose.`
-    }
-  });
+
+    history: history as any,
+    system: `You are an AI assistant. You must adopt the following persona: ${persona}. Your responses should be concise, witty, and directly answer the user's question. Do not be overly verbose.`,
+  } as any);
 
   return { reply: text };
 }

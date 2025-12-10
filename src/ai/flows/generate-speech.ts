@@ -47,7 +47,7 @@ const toWav = async (
 
     let bufs: any[] = [];
     writer.on('error', reject);
-    writer.on('data', (d) => bufs.push(d));
+    writer.on('data', (d: any) => bufs.push(d));
     writer.on('end', () => resolve(Buffer.concat(bufs).toString('base64')));
 
     writer.write(pcmData);
@@ -61,7 +61,7 @@ const generateSpeechFlow = ai.defineFlow(
     inputSchema: GenerateSpeechInputSchema,
     outputSchema: GenerateSpeechOutputSchema,
   },
-  async ({ text, voice }) => {
+  async ({ text, voice }: { text: string; voice?: string }) => {
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -83,7 +83,7 @@ const generateSpeechFlow = ai.defineFlow(
       media.url.substring(media.url.indexOf(',') + 1),
       'base64'
     );
-    
+
     const wavBase64 = await toWav(audioBuffer);
 
     return {

@@ -62,7 +62,12 @@ export default function TimetablePage() {
     setIsLoading(true);
     setResult(null);
     try {
-      const response = await generateTimetable(values);
+      const response = await generateTimetable({
+        ...values,
+        weakAreas: values.weakAreas || "",
+        strongAreas: values.strongAreas || "",
+        examDates: values.examDates || "",
+      });
       setResult(response);
     } catch (error) {
       console.error(error);
@@ -147,7 +152,7 @@ export default function TimetablePage() {
                       </FormItem>
                     )}
                   />
-                   <FormField
+                  <FormField
                     control={form.control}
                     name="examDates"
                     render={({ field }) => (

@@ -13,6 +13,13 @@ import {
 } from '@/ai/flows/conversational-chat';
 import { generateSpeech } from '@/ai/flows/generate-speech';
 
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
 // Check for SpeechRecognition API
 const SpeechRecognition =
   typeof window !== 'undefined' &&
@@ -45,7 +52,7 @@ export default function AiTutorsPage() {
   useEffect(() => {
     const dayOfYear = Math.floor(
       (Date.now() - new Date(new Date().getFullYear(), 0, 0).valueOf()) /
-        (1000 * 60 * 60 * 24)
+      (1000 * 60 * 60 * 24)
     );
     setMessages([
       {
@@ -107,7 +114,7 @@ export default function AiTutorsPage() {
     if (playingAudioId) {
       stopAudio();
     }
-    
+
     setPlayingAudioId(message.id);
     try {
       const speechResult = await generateSpeech({ text: message.content, voice: 'Arcturus' });
@@ -122,7 +129,7 @@ export default function AiTutorsPage() {
       setPlayingAudioId(null);
     }
   };
-  
+
   const handleLike = (messageId: string) => {
     console.log(`Liked message: ${messageId}`);
     // Placeholder for feedback logic
@@ -232,17 +239,17 @@ export default function AiTutorsPage() {
               >
                 {message.content}
               </div>
-               {message.role === 'model' && (
+              {message.role === 'model' && (
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleReadAloud(message)}>
-                      <Volume2 className={cn("h-4 w-4", playingAudioId === message.id && "text-primary animate-pulse")} />
-                   </Button>
-                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleLike(message.id)}>
-                      <ThumbsUp className="h-4 w-4" />
-                   </Button>
-                   <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDislike(message.id)}>
-                      <ThumbsDown className="h-4 w-4" />
-                   </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleReadAloud(message)}>
+                    <Volume2 className={cn("h-4 w-4", playingAudioId === message.id && "text-primary animate-pulse")} />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleLike(message.id)}>
+                    <ThumbsUp className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDislike(message.id)}>
+                    <ThumbsDown className="h-4 w-4" />
+                  </Button>
                 </div>
               )}
             </div>
