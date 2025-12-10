@@ -1,0 +1,7 @@
+{
+  "name": "Eduko AI",
+  "description": "An immersive, gamified, intelligent platform where students can learn, explore, and grow through personalized AI tutors, interactive study tools, and career guidance.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
